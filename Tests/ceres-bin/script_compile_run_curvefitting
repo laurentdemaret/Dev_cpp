@@ -1,0 +1,13 @@
+#!/bin/zsh
+ 
+#Command lines
+
+# Recompile the Cmake project
+make -j3
+
+#Test (Optional)
+#make test
+
+# Run
+ ../ceres-bin/bin/curve_fitting     
+ 

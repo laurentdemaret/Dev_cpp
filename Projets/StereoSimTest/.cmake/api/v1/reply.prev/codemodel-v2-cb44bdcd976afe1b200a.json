@@ -1,0 +1,76 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"jsonFile" : "directory-.-DEBUG-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8.11"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "TestCurveFitting",
+					"jsonFile" : "directory-TestCurveFitting-DEBUG-3663b87a51a31dfd7932.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8.11"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "TestCurveFitting",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "DEBUG",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1
+					],
+					"name" : "StereoSimTest",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 1,
+					"id" : "TestCurveFitting::@607e080123a70511c5aa",
+					"jsonFile" : "target-TestCurveFitting-DEBUG-a45fed258ec49e70bb9d.json",
+					"name" : "TestCurveFitting",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/laurentdemaret/MyProgramms/StereoSimTest",
+		"source" : "/Users/laurentdemaret/MyProgramms/StereoSimTest"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}
