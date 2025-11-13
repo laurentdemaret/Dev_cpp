@@ -14,7 +14,7 @@ using namespace std;
 
 void test_algo_tools()
 {
-    std::cout << "fonctionne sous LINUX - " << std::endl;
+    std::cout << "fonctionne sous LINUX  et sous MAC " << std::endl;
 
     M3Matrix A;
     A.Reshape(2,2,0.);
@@ -97,7 +97,7 @@ void test_map_2()
 
 void bonjour()
 {
-    cout << "Bonjour -- 3 novembre 2025 !" << endl;
+    cout << "Bonjour -- 13 novembre 2025 !" << endl;
     int x=4;
     int y=5;
     std::cout << my_test_add(x,y) << std::endl;

@@ -37,10 +37,10 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = basic1.0.0
-DISTDIR = /Users/laurentdemaret/Dev_cpp/Tests/Qt_MacOS_Minimal/build/Desktop_Qt_6_9_1_clang_64_bit-Debug/.tmp/basic1.0.0
+DISTDIR = /Users/laurentdemaret/Dev_cpp/Tests/Qt_MacOS_Minimal/build/mac/obj/basic1.0.0
 LINK          = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
 LFLAGS        = -stdlib=libc++ -headerpad_max_install_names $(EXPORT_ARCH_ARGS) -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk -mmacosx-version-min=14.0 -Wl,-rpath,@executable_path/../Frameworks
-LIBS          = $(SUBLIBS) -L../../../../MyLibs/Libs -lalgotools   
+LIBS          = $(SUBLIBS) -L/Users/laurentdemaret/Dev_cpp/Tests/Qt_MacOS_Minimal/../../MyLibs/Libs/mac -lalgotools   
 AR            = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar cq
 RANLIB        = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib -s
 SED           = sed
@@ -48,7 +48,7 @@ STRIP         = strip
 
 ####### Output directory
 
-OBJECTS_DIR   = ./
+OBJECTS_DIR   = ../mac/obj/
 
 ####### Files
 
@@ -56,10 +56,10 @@ SOURCES       = ../../Edge2D.cpp \
 		../../Point2D.cpp \
 		../../main.cpp \
 		../../test_functions.cpp 
-OBJECTS       = Edge2D.o \
-		Point2D.o \
-		main.o \
-		test_functions.o
+OBJECTS       = ../mac/obj/Edge2D.o \
+		../mac/obj/Point2D.o \
+		../mac/obj/main.o \
+		../mac/obj/test_functions.o
 DIST          = /usr/local/share/qt/mkspecs/features/spec_pre.prf \
 		/usr/local/share/qt/mkspecs/features/device_config.prf \
 		/usr/local/share/qt/mkspecs/common/unix.conf \
@@ -1236,19 +1236,19 @@ compiler_clean:
 
 ####### Compile
 
-Edge2D.o: ../../Edge2D.cpp ../../Edge2D.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Edge2D.o ../../Edge2D.cpp
+../mac/obj/Edge2D.o: ../../Edge2D.cpp ../../Edge2D.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ../mac/obj/Edge2D.o ../../Edge2D.cpp
 
-Point2D.o: ../../Point2D.cpp ../../Point2D.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Point2D.o ../../Point2D.cpp
+../mac/obj/Point2D.o: ../../Point2D.cpp ../../Point2D.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ../mac/obj/Point2D.o ../../Point2D.cpp
 
-main.o: ../../main.cpp ../../test_function.h \
+../mac/obj/main.o: ../../main.cpp ../../test_function.h \
 		../../Point2D.h \
 		../../../../MyLibs/algo_tools/matrix.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../../main.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ../mac/obj/main.o ../../main.cpp
 
-test_functions.o: ../../test_functions.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o test_functions.o ../../test_functions.cpp
+../mac/obj/test_functions.o: ../../test_functions.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ../mac/obj/test_functions.o ../../test_functions.cpp
 
 ####### Install
 

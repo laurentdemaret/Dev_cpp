@@ -56,16 +56,22 @@ HEADERS += \
 
 INCLUDEPATH +=../../MyLibs/algo_tools
 
-macx {
-LIBS += -L../MyLibs/Libs/mac -lalgotools
-} else:unix
-{
-LIBS += -L../MyLibs/Libs/linux -lalgotools
+macx{
+message(mac reconnu)
+LIBS += -L$${PWD}/../../MyLibs/Libs/mac
 }
+else {
+    unix {
+message(linux reconnu)
+LIBS += -L../MyLibs/Libs/linux
+}
+}
+
+LIBS += -lalgotools
 
 
 message(Le chemin absolu de include path est : $$absolute_path($$INCLUDEPATH, $$_PRO_FILE_PWD_))
-message(Le chemin absolu de Libs est : $$absolute_path($$LIBS))
+message("LIBS vaut : $$LIBS")
 
 # Copy de l'éxécutable dans ~/bin
 #target.path = /Users/laurentdemaret/bin

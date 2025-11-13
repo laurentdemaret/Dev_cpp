@@ -442,7 +442,7 @@ DIST          = /usr/local/share/qt/mkspecs/features/spec_pre.prf \
 		../../numeric.cpp \
 		../../nl_opt.cpp
 QMAKE_TARGET  = algotools
-DESTDIR       = ../../../Libs/
+DESTDIR       = ../../../Libs/mac/
 TARGET        = libalgotools.a
 
 ####### Custom Variables
@@ -456,13 +456,13 @@ EXPORT__PRO_FILE_ = /Users/laurentdemaret/Dev_cpp/MyLibs/algo_tools/algo_tools.p
 first: all
 ####### Build rules
 
-staticlib: ../../../Libs/$(TARGET)
+staticlib: ../../../Libs/mac/$(TARGET)
 
-../../../Libs/libalgotools.a:  $(OBJECTS) $(OBJCOMP) 
-	@test -d ../../../Libs/ || mkdir -p ../../../Libs/
-	-$(DEL_FILE) ../../../Libs/$(TARGET)
+../../../Libs/mac/libalgotools.a:  $(OBJECTS) $(OBJCOMP) 
+	@test -d ../../../Libs/mac/ || mkdir -p ../../../Libs/mac/
+	-$(DEL_FILE) ../../../Libs/mac/$(TARGET)
 	$(AR) $(DESTDIR)$(TARGET) $(OBJECTS)
-	$(RANLIB) ../../../Libs/$(TARGET)
+	$(RANLIB) ../../../Libs/mac/$(TARGET)
 
 
 Makefile: ../../algo_tools.pro /usr/local/share/qt/mkspecs/macx-clang/qmake.conf /usr/local/share/qt/mkspecs/features/spec_pre.prf \
@@ -1224,7 +1224,7 @@ qmake: FORCE
 qmake_all: FORCE
 
 
-all: Makefile ../../../Libs/libalgotools.a
+all: Makefile ../../../Libs/mac/libalgotools.a
 
 dist: distdir FORCE
 	(cd `dirname $(DISTDIR)` && $(TAR) $(DISTNAME).tar $(DISTNAME) && $(COMPRESS) $(DISTNAME).tar) && $(MOVE) `dirname $(DISTDIR)`/$(DISTNAME).tar.gz . && $(DEL_FILE) -r $(DISTDIR)
@@ -1243,7 +1243,7 @@ clean: compiler_clean
 
 
 distclean: clean 
-	-$(DEL_FILE) ../../../Libs/$(TARGET) 
+	-$(DEL_FILE) ../../../Libs/mac/$(TARGET) 
 	-$(DEL_FILE) .qmake.stash
 	-$(DEL_FILE) Makefile
 
