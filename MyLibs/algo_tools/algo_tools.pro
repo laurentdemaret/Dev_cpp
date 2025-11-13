@@ -3,7 +3,19 @@ CONFIG += staticlib  # ou shared pour une librairie dynamique
 
 # Chemin absolu
 #DESTDIR = /Users/laurentdemaret/Dev_Cpp/MyLibs/Libs
-DESTDIR = ../../../Libs
+
+message(Le chemin du projet algo_tools est: $$_PRO_FILE_PWD_)
+
+
+# Choisir un sous-dossier selon le système
+macx {
+DESTDIR = $$_PRO_FILE_PWD_/../Libs/mac
+}
+else:unix {
+    DESTDIR= $$_PRO_FILE_PWD_/../Libs/linux
+#    DESTDIR     = $$BUILDDIR/linux/bin
+}
+
 TARGET = algotools
 
 SOURCES += \

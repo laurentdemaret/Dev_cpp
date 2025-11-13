@@ -14,6 +14,8 @@ using namespace std;
 
 void test_algo_tools()
 {
+    std::cout << "fonctionne sous LINUX - " << std::endl;
+
     M3Matrix A;
     A.Reshape(2,2,0.);
 
