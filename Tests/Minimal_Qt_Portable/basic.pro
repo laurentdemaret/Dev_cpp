@@ -63,7 +63,8 @@ LIBS += -L$${PWD}/../../MyLibs/Libs/mac
 else {
     unix {
 message(linux reconnu)
-LIBS += -L../MyLibs/Libs/linux
+LIBS += -L$${PWD}/../../MyLibs/Libs/linux
+#LIBS += -L../MyLibs/Libs/linux
 }
 }
 

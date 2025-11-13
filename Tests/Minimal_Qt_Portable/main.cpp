@@ -15,7 +15,7 @@ using namespace std;
 void test_algo_tools()
 {
     std::cout << "fonctionne sous LINUX  et sous MAC 13 nov." << std::endl;
-    std::cout << "13:28" << std::endl;
+    std::cout << "13:33" << std::endl;
 
     M3Matrix A;
     A.Reshape(2,2,0.);
