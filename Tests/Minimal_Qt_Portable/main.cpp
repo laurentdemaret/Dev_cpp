@@ -29,6 +29,7 @@ void test_algo_tools()
     A.Dump();
 }
 
+
 void test_map_2()
 {
     std::map<int, Point2D> pointMap;
@@ -95,6 +96,7 @@ void test_map_2()
     // Checking the size of the map
     std::cout << "Number of students: " << studentMap.size() << std::endl;
 }
+
 
 void bonjour()
 {
