@@ -1,9 +1,12 @@
 TEMPLATE = app
-CONFIG += console c++17
+CONFIG += console c++23
 CONFIG -= qt
+CONFIG -= app_bundle
 
 # Nom de l'exécutable
-TARGET = xat
+#TARGET = xat
+DESTDIR = ~/bin
+#TARGET = xat
 
 # Dossier de build et dossier où installer l'exécutable (optionnel)
 #DESTDIR = $$HOME/bin
@@ -61,5 +64,5 @@ CONFIG(debug, debug|release) {
 LIBS += -lm
 
 # Copy de l'éxécutable dans ~/bin
-target.path = /Users/laurentdemaret/bin
-INSTALLS += xat
+#target.path = /Users/laurentdemaret/bin
+#INSTALLS += xat

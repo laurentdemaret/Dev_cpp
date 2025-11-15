@@ -40,16 +40,15 @@ void test()
 
     cout << "x : " << x << endl;
     cout << "y : x^2 " << y << endl;
-
-    exit(-1);
 }
 
 //this is the main for ./xat
 int main(int argc, char* argv[]) 
 {
     test();
-	std::cout << "This is the new version 2025 of at" << std::endl;
-	
+    std::cout << "Voici la nouvelle version du fichier at" << std::endl;
+
+    exit(-1);
 	int at_alg, iterations, exchange_iterations,exchange_radius,quantization, compressing_options;
 	int filenames_num;
 	M3Matrix image;
