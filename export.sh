@@ -23,7 +23,7 @@ fi
 echo "📝 Commit : $msg"
 git commit -m "$msg" || echo "ℹ️ Rien à committer (aucun changement)."
 
-echo "🔄 Récupération des changements distants..."
+echo "Récupération des changements distants..."
 git pull --rebase origin main || {
   echo "⚠️  Conflit détecté : résolvez les conflits puis relancez export.sh"
   exit 1
