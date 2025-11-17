@@ -45,15 +45,15 @@ void test()
 //this is the main for ./xat
 int main(int argc, char* argv[]) 
 {
-    test();
-    std::cout << "Voici la nouvelle version du fichier at" << std::endl;
+    //test();
 
-    exit(-1);
 	int at_alg, iterations, exchange_iterations,exchange_radius,quantization, compressing_options;
 	int filenames_num;
 	M3Matrix image;
 	char* action_key;
-	
+
+    std::cout << "Version portable de at (15 nov. 2025)" << std::endl;
+
 	char** filenames = parse_command_line_at_and_compress(argc,argv,
 														&at_alg,
 														&iterations,

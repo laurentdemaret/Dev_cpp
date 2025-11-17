@@ -1035,7 +1035,7 @@ void Triangulation::removePoint(Point2D* point, vector<Edge*> *cell)
 		}
 		else{
 			Point2D* other = nEdges[i]->getOtherPoint(point);
-			/* splice at other */
+            // splice at other
 			Edge* next = nEdges[i]->getNext(other);
 			Edge* prev = nEdges[i]->getPrev(other);
 			if( other->entry == nEdges[i] ){

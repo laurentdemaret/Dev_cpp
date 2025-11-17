@@ -20,7 +20,7 @@ public:
 	virtual ~Point2D();
 	
 	// attributes
-	int x, y, f;
+    int x, y, f; //x,y: are the coordinates of the point / f is an associated
 	double epsilon;
 	bool gridBound;
 	bool convexHull;
@@ -28,7 +28,7 @@ public:
 	bool thinned;
 	bool dirty;
 	bool exchanged;
-	/* a pointer to the corresponding fibheap element */
+    // a pointer to the corresponding fibheap element
 	void* fh_el;
 	Triangle* thinnedTriangle;
 	Point2D* bestNeighbor;
@@ -53,9 +53,9 @@ public:
 	
 	bool isConvexHull(Point2D*, int, int, int, int);
 	std::vector<Edge*> getCellHull(int, int, int, int);
-	
-	/* */
-	std::vector<Point2D*> getNeighbors();
+
+
+    std::vector<Point2D*> getNeighbors();
 	std::vector<Point2D*> getNeighborsCopy();
 	std::vector<Triangle*> getTriangles();
 	std::vector<Edge*> getEdges();
@@ -63,8 +63,7 @@ public:
 	
 	void deletePoint2D();
 	
-	
-	/* some helper functions */
+    // some helper functions
 	static std::vector<Point2D*> set2vector(std::set<Point2D*>);
 	static std::set<Point2D*> vector2set(std::vector<Point2D*>);
 	static std::set<Point2D*> makeUniqueList(std::set<Point2D*>, std::set<Point2D*>);
@@ -72,18 +71,18 @@ public:
 	static void addAll(std::set<Point2D*>*,std::vector<Point2D*>);
 	static void addAll(std::set<Point2D*>*,std::set<Point2D*>);
 	
-	/* constructor from pool */
+    // constructor from pool
 	static Point2D* makePoint2D(int, int, int);
 
 	bool lessThan(Point2D*);
 
-	/* debug */
+    // debug
 	void debug();
 	void debugNeighbors();
 	static int new_point2d_cnt;
 
 private:
-	/* attributes*/
+    // attributes
 	static std::vector<Point2D*> pool;
 };
 

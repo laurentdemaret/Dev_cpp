@@ -11,7 +11,7 @@ public:
 	PointGrid(std::vector<Point2D*>, unsigned int, unsigned int);
 	virtual ~PointGrid();
 	
-	/* attributes */
+    // attributes
 	std::vector<Point2D*> nodes;
 	unsigned int nbRows;
 	unsigned int nbCols;
