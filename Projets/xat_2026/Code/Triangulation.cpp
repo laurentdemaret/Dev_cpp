@@ -125,8 +125,9 @@ inline bool Triangulation::positionComparator(const void* a, const void* b)
 
 
 
-/* ************************************* PRIVATE ***************************** */
-
+// ***************************************************
+// ************************************* PRIVATE *
+// ***************************************************
 
 void Triangulation::divide(int l, int r, Edge** le, Edge** re)
 {
@@ -525,19 +526,24 @@ vector<Point2D*> Triangulation::getAttachedPoints(unsigned int maxX,
 vector<Point2D*> Triangulation::getAttachedPoints(vector<Point2D*> neighbors)
 {
 	unsigned int maxX = 0, minX = this->xMax, maxY = 0, minY = this->yMax;
-	for (unsigned int i = 0; i < neighbors.size(); i++) {
+    for (unsigned int i = 0; i < neighbors.size(); i++)
+    {
 		unsigned int currX = neighbors[i]->x;
 		unsigned int currY = neighbors[i]->y;
-		if(currX < minX){
+        if(currX < minX)
+        {
 			minX = currX;
 		}
-		if(currY < minY){
+        if(currY < minY)
+        {
 			minY = currY;
 		}
-		if(currX > maxX){
+        if(currX > maxX)
+        {
 			maxX = currX;
 		}
-		if(currY > maxY){
+        if(currY > maxY)
+        {
 			maxY = currY;
 		}
 	}
