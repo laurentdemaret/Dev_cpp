@@ -70,7 +70,7 @@ public:
 	
 	std::vector<Point2D*> getNeighbors();
 	std::vector<Edge*> getEdges();
-	std::vector<Edge*> getCellHull(int, int, int, int);
+    std::vector<Edge*> getCellHull(int, int, int, int);
 	
 	static void fillEdgePool();
 	

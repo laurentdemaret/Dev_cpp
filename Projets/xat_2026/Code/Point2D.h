@@ -81,6 +81,8 @@ public:
 	void debugNeighbors();
 	static int new_point2d_cnt;
 
+    void VoronoiCell();
+
 private:
     // attributes
 	static std::vector<Point2D*> pool;

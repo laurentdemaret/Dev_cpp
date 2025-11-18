@@ -100,6 +100,31 @@ bool Triangle::insideTriangle(Point2D* point)
 	return this->insideTriangle(point->x,point->y);
 }
 
+// int or double (LD: 18/11/25)
+// attribute ??
+int Triangle::xMin()
+{
+    int xMin = point1->x;
+    if(point2->x < xMin) xMin = point2->x;
+    if(point3->x < xMin) xMin = point3->x;
+
+    return xMin;
+}
+
+/*int Triangle::yMin()
+{
+
+}
+
+int Triangle::xMax()
+{
+
+}
+
+int Triangle::yMax()
+{
+
+}*/
 
 // check if this point inside or on one edge 
 // of the triangle builded by the 3 points
@@ -324,3 +349,5 @@ void Triangle::debug()
 {
 	cout<<this->point1->x<<","<<this->point1->y<<"-"<<this->point2->x<<","<<this->point2->y<<"-"<<this->point3->x<<","<<this->point3->y<<endl;
 }
+
+

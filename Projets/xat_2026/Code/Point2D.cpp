@@ -295,7 +295,7 @@ vector<Triangle*> Point2D::getTriangles()
 		last_neighbor = orbit->getOtherPoint(this);
 		orbit = orbit->getNext(this);
 	}
-	/* last time */
+    // last time
 	if(orbit->checkTriangle(last_neighbor)){
 		triangles.push_back(Triangle::makeTriangle(orbit,last_neighbor));
 	}
@@ -448,4 +448,44 @@ void Point2D::debugNeighbors(){
 	for (unsigned int i = 0; i < neighbors.size(); i++) {
 		neighbors[i]->debug();
 	}	
+}
+
+
+// *************%%%%%%%%%%%
+// TODO: 18 novembre 2025
+// *************%%%%%%%%%%%
+void Point2D::VoronoiCell()
+{
+    vector<Triangle*> DelaunayNeighborTriangles = this->getTriangles();
+
+    for (unsigned int i = 0; i < DelaunayNeighborTriangles.size(); i++)
+    {
+        //
+
+        //DelaunayNeighborTriangles[i]->;
+        /*for(int j= xMin;j <=xMax;j++)
+            for(int k= yMin;k <= yMax;k++)
+            {
+
+            }
+*/
+    }
+
+
+    //Fonction tentée le 18 novembre - à modifier
+    /*void Triangle::Voronoi()
+    {
+        double ax = (double)(this->point1->x);
+        double ay = (double)(this->point1->y);
+        double bx = (double)(this->point2->x);
+        double by = (double)(this->point2->y);
+        double cx = (double)(this->point3->x);
+        double cy = (double)(this->point3->y);
+
+        for()
+            double da
+    }*/
+
+
+
 }

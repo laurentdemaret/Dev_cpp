@@ -250,8 +250,6 @@ void Edge::adjustQuadStructure(Point2D* point1,
 
 
 // Add an edge to a ring of edges.
-// @param b
-// @param v
 void Edge::splice(Edge* b, Point2D* v)
 {
 	Edge* next;
@@ -296,11 +294,8 @@ void Edge::splice(Edge* b, Point2D* v)
  */
 Edge* Edge::join(Point2D* u, Edge* b, Point2D* v, int s)
 {
-	/*
-	 * u and v are the two vertices which are being joined. a and b are the
-	 * two edges associated with u and v res.
-	 */
-
+    // u and v are the two vertices which are being joined. a and b are the
+    // two edges associated with u and v res.
 	Edge* e = Edge::makeEdge(u, v);
 
 	if (s == LEFT) {

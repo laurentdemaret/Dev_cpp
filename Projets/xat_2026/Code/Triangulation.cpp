@@ -124,7 +124,6 @@ inline bool Triangulation::positionComparator(const void* a, const void* b)
 }
 
 
-
 // ***************************************************
 // ************************************* PRIVATE *
 // ***************************************************
@@ -1100,14 +1099,14 @@ vector<Edge*> Triangulation::deletePoint(Point2D* point)
 {
 	
 	vector<Point2D*> neighbors = point->getNeighbors();
-	/* triangles of the cell */
+    // triangles of the cell
 	vector<Triangle*> cellTriangles = point->getTriangles();
-	/* get cell hull of this point*/
+    // get cell hull of this point
 	vector<Edge*> cell = point->getCellHull(this->xMax,
 											this->xMin,
 											this->yMax,
 											this->yMin);
-	/* remove point from cell */
+    // remove point from cell
 	vector<Edge*> newEdges;
 	this->removePoint(point, &cell);
 	

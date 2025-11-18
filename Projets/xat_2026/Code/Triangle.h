@@ -49,7 +49,15 @@ public:
 	void debug();
 
 	static std::vector<Triangle*> pool;
-	
+
+
+    int xMin();
+    int yMin();
+    int xMax();
+    int yMax();
+
+
+
 private:	
 	// methods 
 	void initTriangle(Point2D*, Point2D*, Point2D*);	
