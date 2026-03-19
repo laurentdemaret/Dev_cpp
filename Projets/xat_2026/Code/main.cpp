@@ -1,4 +1,4 @@
-#include <time.h>
+#include <ctime>
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
@@ -45,7 +45,7 @@ void test()
 //this is the main for ./xat
 int main(int argc, char* argv[]) 
 {
-    //test();
+    test();
 
 	int at_alg, iterations, exchange_iterations,exchange_radius,quantization, compressing_options;
 	int filenames_num;
