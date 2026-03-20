@@ -35,7 +35,8 @@ public:
 	bool insideTriangle(Point2D*);
 	bool insideTriangle(double, double);
 	void getEdges(Edge**,Edge**,Edge**);
-	Point2D* getOtherPoint(Point2D*, Point2D*);
+    std::pair<Point2D*, Point2D*> getOtherPoints(Point2D* a);
+    Point2D* getOtherPoint(Point2D*, Point2D*);
 	Point2D* getOtherPoint(Edge*);
 	Triangle* getNeighbourByEdge(Edge*);
 	Point2D* getNeighbourPointByEdge(Edge* edge);

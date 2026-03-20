@@ -6,9 +6,6 @@
 #include <cmath>
 
 #include "PGM.h"
-/*#include "../tools/matrix/matrix.h"
-#include "../triangulation/Triangle.h"
-#include "../triangulation/Triangulation.h"*/
 
 #include "matrix.h"
 #include "Triangle.h"
@@ -594,7 +591,6 @@ void PGM::optimize(int NbRows,
        }
        q[i][0] = tmp;
      }
-
 
 
      // alpha_k = gamma_k/N_2(q_k)

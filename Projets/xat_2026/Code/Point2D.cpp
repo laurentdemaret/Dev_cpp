@@ -460,7 +460,13 @@ void Point2D::VoronoiCell()
 
     for (unsigned int i = 0; i < DelaunayNeighborTriangles.size(); i++)
     {
-        //
+        //Coordonnées des trois sommets du triangle
+        double x1 = DelaunayNeighborTriangles[i]->point1->x;
+        double y1 = DelaunayNeighborTriangles[i]->point1->y;
+        double x2 = DelaunayNeighborTriangles[i]->point2->x;
+        double y2 = DelaunayNeighborTriangles[i]->point2->y;
+        double x3 = DelaunayNeighborTriangles[i]->point3->x;
+        double y3 = DelaunayNeighborTriangles[i]->point3->y;
 
         //DelaunayNeighborTriangles[i]->;
         /*for(int j= xMin;j <=xMax;j++)
@@ -471,6 +477,14 @@ void Point2D::VoronoiCell()
 */
     }
 
+
+    //****************
+    // double dA = (x-xA)*(x-xA) + (y-yA)*(y-yA);
+    //double dB = (x-xB)*(x-xB) + (y-yB)*(y-yB);
+    //double dC = (x-xC)*(x-xC) + (y-yC)*(y-yC);
+
+    //bool closestToA = (dA <= dB && dA <= dC);
+    //****************
 
     //Fonction tentée le 18 novembre - à modifier
     /*void Triangle::Voronoi()

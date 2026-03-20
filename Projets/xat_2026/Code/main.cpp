@@ -23,6 +23,19 @@
 
 using namespace std;
 
+
+void test_Triangulations()
+{
+    std::cout << "test Triangulations" << std::endl;
+
+    //Define some points
+    Point2D p1(0,0);
+
+
+
+    exit(1);
+}
+
 double my_function_2D(double x)
 {
     double y = x*x;
@@ -45,7 +58,8 @@ void test()
 //this is the main for ./xat
 int main(int argc, char* argv[]) 
 {
-    test();
+    //test();
+    test_Triangulations();
 
 	int at_alg, iterations, exchange_iterations,exchange_radius,quantization, compressing_options;
 	int filenames_num;

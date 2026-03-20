@@ -219,6 +219,17 @@ void Triangle::getEdges(Edge** e1,Edge** e2,Edge** e3)
 }
 
 
+std::pair<Point2D*, Point2D*> Triangle::getOtherPoints(Point2D* a)
+{
+    // Check that this is a triangle
+    if (a == point1) return {point2, point3};
+    if (a == point2) return {point1, point3};
+    if (a == point3) return {point1, point2};
+
+    throw std::invalid_argument("Point not in triangle");
+}
+
+
 Point2D* Triangle::getOtherPoint(Point2D* a, Point2D* b)
 {
 	if(this->point1 != a 

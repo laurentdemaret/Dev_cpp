@@ -1,15 +1,21 @@
-# xat.pro — projet C++ pur
+# xat.pro
 TEMPLATE = app
-QMAKE_MACOSX_DEPLOYMENT_TARGET = 14.0
+macx {
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 14.0
+}
 CONFIG -= qt
 CONFIG += console c++23
 CONFIG += sdk_no_version_check
 # Nom et emplacement de l'exécutable
 #DESTDIR = ~/bin
-DESTDIR = $$HOME/bin
 TARGET = xat
-CONFIG -= app_bundle
+#message($$(HOME))
+DESTDIR = $$(HOME)/bin
 
+# FORCE le chemin de sortie (clé)
+#QMAKE_LFLAGS += -Wl,-o,$$DESTDIR/$$TARGET
+
+CONFIG -= app_bundle
 
 # Fichiers sources
 SOURCES += \

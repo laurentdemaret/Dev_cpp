@@ -343,7 +343,7 @@ double Thinning::calculatePointSignificance_ForAT8(Point2D* point)
 
 double Thinning::calculateEdgeSignificance(Edge* edge)
 {
-	/* get neighbors */
+    // get neighbors
 	vector<Point2D*> neighbors;
 	vector<Point2D*> on = edge->org->getNeighbors();
 	for (unsigned int i = 0; i < on.size(); i++) {
@@ -365,7 +365,7 @@ double Thinning::calculateEdgeSignificance(Edge* edge)
 	vector<Triangle*> nTriangles = tri->getTriangles();		
 	vector<Point2D*> attachedPoints = this->triangulation->getAttachedPoints(neighbors);
 	double sig = calculateSignificance(oTriangles,nTriangles,attachedPoints,edge);
-	/* refactor objects */
+    // refactor objects
 	Triangle::deleteTriangles(oTriangles);
 
 	tri->deleteTriangulation(nTriangles);
@@ -440,7 +440,7 @@ void Thinning::thinningAT5(unsigned int tcount)
 /* ********************** DEBUG ***************************** */
 	}
 	
-	/* free mem */
+    // free mem
 	fh_deleteheap(this->nodeHeap);	
 	fh_deleteheap(this->edgeHeap);	
 }
@@ -680,7 +680,7 @@ int Thinning::exchange(unsigned int exchange_iterations)
 			calculatePairSignificance(this->triangulation->nodes[i]);		
 		}
 	}
-	/* do exchange */
+    // do exchange
 	int xcount = 0;
 	while ( true && (/*exchange_iterations<0 || */ exchange_iterations > xcount)) {
 		/* heap is empty */
