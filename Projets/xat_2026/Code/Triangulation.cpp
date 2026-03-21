@@ -37,6 +37,9 @@ Triangulation::~Triangulation()
 {
 }
 
+// *****************************************************************
+// This creates a Triangulation from a vector of Point2D*
+// *****************************************************************
 Triangulation* Triangulation::makeTriangulation(vector<Point2D*> n)
 {
 	if(Triangulation::pool.size() > 0)

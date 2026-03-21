@@ -15,13 +15,15 @@ class Point2D
 {
 public:
 	// constructors/destructors
+    Point2D();
 	Point2D(int, int);
 	Point2D(int, int, int);
 	virtual ~Point2D();
 	
 	// attributes
     int x, y, f; //x,y: are the coordinates of the point / f is an associated
-	double epsilon;
+
+    double epsilon;
 	bool gridBound;
 	bool convexHull;
 	Edge* entry;

@@ -15,7 +15,7 @@
 #include "PGM.h"
 #include "PointGrid.h"
 #include "Point2D.h"
-#include "Edge.h"
+//#include "Edge.h"
 #include "Triangle.h"
 #include "Triangulation.h"
 #include "Thinning.h"
@@ -29,8 +29,46 @@ void test_Triangulations()
     std::cout << "test Triangulations" << std::endl;
 
     //Define some points
-    Point2D p1(0,0);
+    vector<Point2D*> nodes;
 
+    //Point2D* p1 = Point2D::makePoint2D(0,0,0);
+    nodes.push_back(Point2D::makePoint2D(0,0,0));
+    nodes.push_back(Point2D::makePoint2D(10,0,0));
+    nodes.push_back(Point2D::makePoint2D(0,10,0));
+    nodes.push_back(Point2D::makePoint2D(10,10,0));
+    nodes.push_back(Point2D::makePoint2D(4,4,0));
+
+    Triangulation* tri = Triangulation::makeTriangulation(nodes);
+    vector<Edge*> edges = tri->getEdges();
+    vector<Triangle*> triangles = tri->getTriangles(edges);
+
+    for(int i = 0;i<triangles.size();i++)
+    {
+        Triangle* t= triangles.at(i);
+        std::cout << "Triangle :" << i<< std::endl;
+        std::cout << "(" << t->point1->x << " , " << t->point1->y << ")" << std::endl;
+        std::cout << "(" << t->point2->x << " , " << t->point2->y << ")" << std::endl;
+        std::cout << "(" << t->point3->x << " , " << t->point3->y << ")" << std::endl;
+        std::cout << std::endl;
+    }
+
+    //std::stream
+    //std::string();
+
+//    tri->writeNodes();
+    int indx = 4;
+    std::cout << "nodes.at("<<indx <<")->x : "  << nodes.at(indx)->x << std::endl;
+    std::cout << "nodes.at("<<indx <<")->y : "  << nodes.at(indx)->y << std::endl;
+
+    //Triangulation()
+
+    std::cout << "push_back successful ?" << std::endl;
+
+    //Point2D p1(0,0);
+    Point2D p2(10,0);
+    Point2D p3(10,10);
+    Point2D p4(10,10);
+    Point2D p5(10,10);
 
 
     exit(1);

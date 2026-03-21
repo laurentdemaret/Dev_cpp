@@ -15,6 +15,13 @@ using namespace std;
 vector<Point2D*> Point2D::pool;
 int Point2D::new_point2d_cnt = 0;
 
+
+Point2D::Point2D()
+{
+    this->x = 0;
+    this->y = 0;
+}
+
 Point2D::Point2D(int cx, int cy)
 {
 	this->x = cx;
@@ -68,7 +75,7 @@ void Point2D::deletePoint2D()
 		Point2D::pool.push_back(this);
 	}
 	else{
-		/* free edge */
+        //free edge
 		delete this;	
 	}
 }
