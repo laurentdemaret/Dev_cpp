@@ -11,10 +11,8 @@
 
 using namespace std;
 
-
 vector<Point2D*> Point2D::pool;
 int Point2D::new_point2d_cnt = 0;
-
 
 Point2D::Point2D()
 {
@@ -37,6 +35,7 @@ Point2D::Point2D(int cx, int cy, int cv)
 		this->entry = NULL;
 		this->epsilon = __DBL_MAX__;
 		this->clone = NULL;
+        this->VoronoiCentroid = NULL;
 		this->fh_el = NULL;
 		this->exchange_fh_el = NULL;
 		this->dirty = false;
@@ -69,6 +68,10 @@ void Point2D::deletePoint2D()
 		this->clone->clone = NULL;
 		this->clone = NULL;
 	}
+    if(this->VoronoiCentroid != NULL){
+        this->VoronoiCentroid = NULL;
+    }
+
 	this->fh_el = NULL;
 	
 	if(Point2D::pool.size() < POINT2D_POOL_SIZE){
@@ -90,7 +93,8 @@ Point2D* Point2D::makePoint2D(int cx, int cy, int cv)
 		p->y = cy;
 		p->f = cv;
 		p->clone = NULL;
-		p->fh_el = NULL;
+        p->VoronoiCentroid = NULL;
+        p->fh_el = NULL;
 		p->exchange_fh_el = NULL;
 		p->gridBound = false;
 		p->dirty = false;
@@ -106,10 +110,11 @@ Point2D* Point2D::makePoint2D(int cx, int cy, int cv)
 	
 Point2D* Point2D::clonePoint2D()
 {
-	Point2D* c = Point2D::makePoint2D(this->x, this->y, this->f);
-	this->clone = c;
-	c->clone = this;
-	return c;
+    Point2D* c = Point2D::makePoint2D(this->x, this->y, this->f);
+    //std::cout << "rentree dans cloonePoint2D()" << std::endl;
+    this->clone = c;
+    c->clone = this;
+    return c;
 }
 
 
@@ -123,7 +128,21 @@ vector<Point2D*> Point2D::clonePoint2D(vector<Point2D*> arr)
 	return ret;
 }
 
-/* ************************ geometric operations *********************** */
+void Point2D::setVoronoiCentroid(Point2D* vc)
+{
+    std::cout << "avant: " << this->VoronoiCentroid << std::endl;
+    this->VoronoiCentroid = vc;
+    std::cout << "apres (Voronoi Centroid): " << this->VoronoiCentroid << std::endl;
+    std::cout << "apres (clone): " << this->clone << std::endl;
+}
+
+/*Point2D* c = Point2D::makePoint2D(this->x, this->y, this->f);
+    this->clone = c;
+    c->clone = this;
+    return c;*/
+//}
+
+// ************************ geometric operations ***********************
 int Point2D::crossProduct(Point2D* p2, Point2D* p3)
 {
 	return ((p2->x - this->x) * (p3->y - this->y) 

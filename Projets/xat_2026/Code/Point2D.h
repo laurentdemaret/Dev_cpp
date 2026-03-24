@@ -22,6 +22,7 @@ public:
 	
 	// attributes
     int x, y, f; //x,y: are the coordinates of the point / f is an associated
+    Point2D* VoronoiCentroid;
 
     double epsilon;
 	bool gridBound;
@@ -36,7 +37,7 @@ public:
 	Point2D* bestNeighbor;
 	double bestNeighborDiff;
 	void* exchange_fh_el;
-	// copy: needed producing temp triangulations
+    // copy: needed producing temp triangulations
 	Point2D* clone;
 	
 
@@ -50,9 +51,10 @@ public:
 	int inCircle(Point2D*, Point2D*, Point2D*);
 	bool ccw(Point2D*, Point2D*);
 	bool checkScore(Point2D*, Point2D*, Point2D*);
-	static std::vector<Point2D*> clonePoint2D(std::vector<Point2D*>);
-	Point2D* clonePoint2D();
-	
+    static std::vector<Point2D*> clonePoint2D(std::vector<Point2D*>);
+    Point2D* clonePoint2D();
+    void setVoronoiCentroid(Point2D* vc);
+
 	bool isConvexHull(Point2D*, int, int, int, int);
 	std::vector<Edge*> getCellHull(int, int, int, int);
 

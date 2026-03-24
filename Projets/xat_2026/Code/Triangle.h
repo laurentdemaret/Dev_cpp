@@ -35,12 +35,14 @@ public:
 	bool insideTriangle(Point2D*);
 	bool insideTriangle(double, double);
 	void getEdges(Edge**,Edge**,Edge**);
-    std::pair<Point2D*, Point2D*> getOtherPoints(Point2D* a);
+    //std::pair<Point2D*, Point2D*> getOtherPoints(Point2D* a);
     Point2D* getOtherPoint(Point2D*, Point2D*);
 	Point2D* getOtherPoint(Edge*);
 	Triangle* getNeighbourByEdge(Edge*);
 	Point2D* getNeighbourPointByEdge(Edge* edge);
-	
+    Point2D* getVoronoiCentroid(Point2D* p);
+
+
 	double GetArea();
     double GetAspectRatio();
 	

@@ -219,7 +219,7 @@ void Triangle::getEdges(Edge** e1,Edge** e2,Edge** e3)
 }
 
 
-std::pair<Point2D*, Point2D*> Triangle::getOtherPoints(Point2D* a)
+/*std::pair<Point2D*, Point2D*> Triangle::getOtherPoints(Point2D* a)
 {
     // Check that this is a triangle
     if (a == point1) return {point2, point3};
@@ -227,7 +227,7 @@ std::pair<Point2D*, Point2D*> Triangle::getOtherPoints(Point2D* a)
     if (a == point3) return {point1, point2};
 
     throw std::invalid_argument("Point not in triangle");
-}
+}*/
 
 
 Point2D* Triangle::getOtherPoint(Point2D* a, Point2D* b)
@@ -252,6 +252,41 @@ Point2D* Triangle::getOtherPoint(Point2D* a, Point2D* b)
 Point2D* Triangle::getOtherPoint(Edge* edge)
 {
 	return this->getOtherPoint(edge->org, edge->dest);
+}
+
+Point2D* Triangle::getVoronoiCentroid(Point2D* p)
+{
+    double d1, d2, d3, d;
+
+    int indx_nn = 1;
+    d1 = ((*this).point1->x -p->x)*((*this).point1->x -p->x) + ((*this).point1->y -p->y)*((*this).point1->y -p->y);
+    d2 = ((*this).point2->x -p->x)*((*this).point2->x -p->x) + ((*this).point2->y -p->y)*((*this).point2->y -p->y);
+    d3 = ((*this).point3->x -p->x)*((*this).point3->x -p->x) + ((*this).point3->y -p->y)*((*this).point3->y -p->y);
+    d=d1;
+    if(d2<d)
+    {
+        d=d2;
+        indx_nn = 2;
+    }
+
+    if(d3<d)
+    {
+        d=d3;
+        indx_nn = 3;
+    }
+
+    if(indx_nn == 1)
+    {
+        return this->point1;
+    }
+    if(indx_nn == 2)
+    {
+        return this->point2;
+    }
+    if(indx_nn == 3)
+    {
+        return this->point3;
+    }
 }
 
 Triangle* Triangle::getNeighbourByEdge(Edge *edge)

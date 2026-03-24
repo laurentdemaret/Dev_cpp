@@ -37,6 +37,7 @@ void test_Triangulations()
     nodes.push_back(Point2D::makePoint2D(0,10,0));
     nodes.push_back(Point2D::makePoint2D(10,10,0));
     nodes.push_back(Point2D::makePoint2D(4,4,0));
+    nodes.push_back(Point2D::makePoint2D(6,6,0));
 
     Triangulation* tri = Triangulation::makeTriangulation(nodes);
     vector<Edge*> edges = tri->getEdges();
@@ -56,20 +57,60 @@ void test_Triangulations()
     //std::string();
 
 //    tri->writeNodes();
+
+
+    // Premier test Voronoi sur un triangle et un pixel sélectionnés
+    //Point2D* pixel = new Point2D(9,7,0);
+    //Point2D* pixel = Point2D::makePoint2D(9,7,0);
+
+    vector<Point2D*> pixels;
+    pixels.push_back(Point2D::makePoint2D(9,7,0));
+    Point2D* pixel = pixels.at(0);
+    /*
     int indx = 4;
     std::cout << "nodes.at("<<indx <<")->x : "  << nodes.at(indx)->x << std::endl;
     std::cout << "nodes.at("<<indx <<")->y : "  << nodes.at(indx)->y << std::endl;
+    Triangle* triangle = triangles.at(indx);
+    Point2D* centroid = triangle->getVoronoiCentroid(pixel);
+    pixel->setVoronoiCentroid(centroid);
+    std::cout << "pixel : " << pixel << std::endl;
+    std::cout << " pixel->clone: " << pixel->clone << std::endl;
+    std::cout << " pixel->VoronoiCentroid: " << pixel->VoronoiCentroid << std::endl;*/
+
+    for(int i = 0;i < triangles.size();i++)
+    {
+        Triangle* triangle = triangles.at(i);
+        if(triangle->insideTriangle(pixel))
+        {
+           std::cout << "Le point est dans le triangle " << i << std::endl;
+           Point2D* centroid = triangle->getVoronoiCentroid(pixel);
+           pixel->setVoronoiCentroid(centroid);
+           std::cout << "pixel : " << pixel << std::endl;
+           std::cout << " pixel->clone: " << pixel->clone << std::endl;
+           std::cout << " pixel->VoronoiCentroid: " << pixel->VoronoiCentroid << std::endl;
+
+           //std::cout << "centroid : " << centroid->x  << " "  << centroid->y << std::endl;
+        }
+        else
+        {
+          std::cout << "Le point est en dehors du triangle" << i <<  std::endl;
+        }
+        std::cout << "SET centroid ptr dans la boucle: " << pixel->VoronoiCentroid << std::endl;
+    }
+
+    std::cout << "SET centroid ptr après la boucle: " << pixel->VoronoiCentroid << std::endl;
+    std::cout << "pixel->centroid " << pixel->VoronoiCentroid->x << ", " << pixel->VoronoiCentroid->y << std::endl;
+
+    //Point2D* p1 = triangle->point1;
+    //std::pair<Point2D*, Point2D*>  p_op = triangle->getOtherPoints(p1);
+
+    /*vector<Point2D*> nodes_from_tri = tri->getNodes();
+    for(int i = 0;i<nodes_from_tri;i++)
+    {}*/
 
     //Triangulation()
 
     std::cout << "push_back successful ?" << std::endl;
-
-    //Point2D p1(0,0);
-    Point2D p2(10,0);
-    Point2D p3(10,10);
-    Point2D p4(10,10);
-    Point2D p5(10,10);
-
 
     exit(1);
 }
