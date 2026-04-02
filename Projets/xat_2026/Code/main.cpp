@@ -32,12 +32,12 @@ void test_Triangulations()
     vector<Point2D*> nodes;
 
     //Point2D* p1 = Point2D::makePoint2D(0,0,0);
-    nodes.push_back(Point2D::makePoint2D(0,0,0));
-    nodes.push_back(Point2D::makePoint2D(10,0,0));
-    nodes.push_back(Point2D::makePoint2D(0,10,0));
-    nodes.push_back(Point2D::makePoint2D(10,10,0));
-    nodes.push_back(Point2D::makePoint2D(4,4,0));
-    nodes.push_back(Point2D::makePoint2D(6,6,0));
+    nodes.push_back(Point2D::makePoint2D(0,0,100));
+    nodes.push_back(Point2D::makePoint2D(100,0,200));
+    nodes.push_back(Point2D::makePoint2D(0,100,50));
+    nodes.push_back(Point2D::makePoint2D(100,100,10));
+    nodes.push_back(Point2D::makePoint2D(40,40,120));
+    nodes.push_back(Point2D::makePoint2D(60,60,150));
 
     Triangulation* tri = Triangulation::makeTriangulation(nodes);
     vector<Edge*> edges = tri->getEdges();
@@ -63,21 +63,80 @@ void test_Triangulations()
     //Point2D* pixel = new Point2D(9,7,0);
     //Point2D* pixel = Point2D::makePoint2D(9,7,0);
 
-    vector<Point2D*> pixels;
-    pixels.push_back(Point2D::makePoint2D(9,7,0));
-    Point2D* pixel = pixels.at(0);
-    /*
-    int indx = 4;
-    std::cout << "nodes.at("<<indx <<")->x : "  << nodes.at(indx)->x << std::endl;
-    std::cout << "nodes.at("<<indx <<")->y : "  << nodes.at(indx)->y << std::endl;
-    Triangle* triangle = triangles.at(indx);
-    Point2D* centroid = triangle->getVoronoiCentroid(pixel);
-    pixel->setVoronoiCentroid(centroid);
-    std::cout << "pixel : " << pixel << std::endl;
-    std::cout << " pixel->clone: " << pixel->clone << std::endl;
-    std::cout << " pixel->VoronoiCentroid: " << pixel->VoronoiCentroid << std::endl;*/
+    //std::size_t NbRows = 10;
+    //std::size_t NbCols = 10;
 
-    for(int i = 0;i < triangles.size();i++)
+
+    int NbRows = 101, NbCols = 101;
+    std::vector<std::vector<Point2D*>> pixels(
+        NbRows,
+        std::vector<Point2D*>(NbCols, nullptr)
+        );
+
+
+    //vector<Point2D*> pixels;
+    for(int i = 0;i < NbRows;i++)
+        for(int j = 0;j < NbCols;j++)
+        {
+            //pixels.push_back(Point2D::makePoint2D(i,j,0));
+            pixels[i][j] = new Point2D(i, j, 0);
+
+            for(int t = 0; t < (int)triangles.size();t++)
+            {
+                Triangle* triangle = triangles.at(t);
+                if(triangle->insideTriangle(pixels[i][j]))
+                {
+                    std::cout << "Le point "<< i << "," << j  <<" est dans le triangle " << t << std::endl;
+
+                    Point2D* centroid = triangle->getVoronoiCentroid(pixels[i][j]);
+                    pixels[i][j]->setVoronoiCentroid(centroid);
+                    pixels[i][j]->f = centroid->f;
+                    std::cout << "pixel : " << pixels[i][j] << std::endl;
+
+                    //std::cout << " pixel->clone: " << pixels[i][j]->clone << std::endl;
+                    //std::cout << " pixel->VoronoiCentroid: " << pixels[i][j]->VoronoiCentroid << std::endl;
+                }
+            }
+        }
+
+    std::cout << std::endl;
+    std::cout << std::endl;
+
+    std::cout << "Test après la boucle " << std::endl;
+
+
+    int i = 70;
+    int j = 40;
+
+    std::cout << "i,j" << i << "," << j << std::endl;
+
+    int vc_x = pixels[i][j]->VoronoiCentroid->x;
+    int vc_y = pixels[i][j]->VoronoiCentroid->y;
+    int vc_f = pixels[i][j]->VoronoiCentroid->f;
+
+    std::cout << "vc_x:" << vc_x << std::endl;
+    std::cout << "vc_y:" << vc_y << std::endl;
+    std::cout << "vc_f:" << vc_f << std::endl;
+    std::cout << "f:" << pixels[i][j]->f << std::endl;
+
+
+    M3Matrix Image(NbRows,NbCols);
+    for(int i =0;i<Image.GetNbRows();i++)
+        for(int j =0;j<Image.GetNbCols();j++)
+        {
+            Image[i][j] = pixels[i][j]->f;
+        }
+
+    ofstream outStream("image.pgm");
+    Image.SavePGM(outStream);
+
+    exit(-1);
+    //Implémentation naive revoir l'indexation des pixels ? classe matrix ?
+
+
+    /*pixels.push_back(Point2D::makePoint2D(9,7,0));
+    Point2D* pixel = pixels.at(0);
+    for(int i = 0;i < (int)triangles.size();i++)
     {
         Triangle* triangle = triangles.at(i);
         if(triangle->insideTriangle(pixel))
@@ -96,10 +155,10 @@ void test_Triangulations()
           std::cout << "Le point est en dehors du triangle" << i <<  std::endl;
         }
         std::cout << "SET centroid ptr dans la boucle: " << pixel->VoronoiCentroid << std::endl;
-    }
+    }*/
 
-    std::cout << "SET centroid ptr après la boucle: " << pixel->VoronoiCentroid << std::endl;
-    std::cout << "pixel->centroid " << pixel->VoronoiCentroid->x << ", " << pixel->VoronoiCentroid->y << std::endl;
+    /*std::cout << "SET centroid ptr après la boucle: " << pixel->VoronoiCentroid << std::endl;
+    std::cout << "pixel->centroid " << pixel->VoronoiCentroid->x << ", " << pixel->VoronoiCentroid->y << std::endl;*/
 
     //Point2D* p1 = triangle->point1;
     //std::pair<Point2D*, Point2D*>  p_op = triangle->getOtherPoints(p1);
