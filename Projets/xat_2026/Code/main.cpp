@@ -24,20 +24,180 @@
 using namespace std;
 
 
+class TestTriangle;
+
+
+class TestPoint
+{
+public:
+    TestPoint(){};
+    TestPoint(double xd, double yd){
+        x = xd;
+        y = yd;
+    };
+    //virtual ~TestPoint() {}
+
+    void Dump()
+    {
+        std::cout << "Dump (TestPoint) :" << x << ", " << y  << std::endl;
+    }
+
+    double x=0.;
+    double y=0.;
+
+    vector<TestTriangle*> neighbour_triangles;
+
+};
+
+
+class TestTriangle
+{
+public:
+    TestTriangle(){};
+    TestTriangle(TestPoint* a,TestPoint* b,TestPoint* c)
+    {
+        p1 = a;
+        p2 = b;
+        p3 = c;
+    };
+    virtual ~TestTriangle() {}
+
+    TestPoint* p1 = nullptr;
+    TestPoint* p2 = nullptr;
+    TestPoint* p3 = nullptr;
+
+    /*void SetPoints(TestPoint* a,TestPoint* b,TestPoint* c)
+    {
+        p1 = a;
+        p2 = b;
+        p3 = c;
+    };*/
+    double GetArea()
+    {
+        double p12x = p2->x-p1->x;
+        double p12y = p2->y-p1->y;
+        double p13x = p3->x-p1->x;
+        double p13y = p3->y-p1->y;
+
+        double area = fabs(0.5*(p12x*p13y-p12y*p13x));
+        return area;
+    }
+
+};
+
+
+class ImageMesh
+{
+public:
+    std::vector<std::unique_ptr<TestPoint>> pixels;
+    std::vector<std::unique_ptr<TestPoint>> nodes;
+    std::vector<std::unique_ptr<TestTriangle>> triangles;
+
+    TestPoint* addPixel(double x, double y)
+    //void addPixel(double x, double y)
+    {
+        pixels.push_back(std::make_unique<TestPoint>());
+        auto* p = pixels.back().get();
+        p->x = x;
+        p->y = y;
+        return p;
+    }
+};
+
+
+void test_Pointers()
+{
+    std::cout << "test Pointers " << std::endl;
+    double xd = 0.4;
+    double yd = 0.5;
+
+    TestPoint* p = new TestPoint(xd,yd);
+    {
+        vector<TestPoint*> points;
+
+      points.push_back(p);
+      points[0]->Dump();
+      std::cout << "1. p        " <<  p << std::endl;
+      std::cout << "2. points[0] " <<  points[0] << std::endl;
+    }
+    std::cout << "3. p        " <<  p << std::endl;
+    //std::cout << "4. points[0] " <<  points[0] << std::endl;
+
+    //points[0]->Dump();
+
+    ImageMesh m;
+
+    /*TestTriangle* t1 = new TestTriangle();
+    TestTriangle* t2 = new TestTriangle();
+
+    TestPoint* a = new TestPoint(0.,0.0);
+    TestPoint* b = new TestPoint(0.,1.0);
+    TestPoint* c = new TestPoint(1.,0.0);
+    TestPoint* d = new TestPoint(1.,1.0); */
+
+      /*t1->SetPoints(a,b,c);
+      a->neighbour_triangles.push_back(t1);
+      b->neighbour_triangles.push_back(t1);
+      c->neighbour_triangles.push_back(t1);
+
+      t2->SetPoints(b,c,d);
+      b->neighbour_triangles.push_back(t2);
+      c->neighbour_triangles.push_back(t2);
+      d->neighbour_triangles.push_back(t2);*/
+
+
+      //std::cout << "Area of the triangle before change: " << t1->GetArea() << std::endl;
+
+}
+
+
 void test_Triangulations()
 {
     std::cout << "test Triangulations" << std::endl;
+
+    //Load an image
+    M3Matrix OriginalImage;
+    //std::string OriginalImageName("Original/church_gray_ascii.pgm");
+    std::string OriginalImageName("Data/lena128.pgm");
+    OriginalImage.LoadFromPGM(OriginalImageName);
+
+    M3Matrix TestImage;
+    std::string TestImageName("Out/test.pgm");
+    TestImage = OriginalImage;
+    for(int i=0;i<TestImage.GetNbRows();i++)
+    {
+        for(int j=0;j<TestImage.GetNbCols();j++)
+        {
+            TestImage[i][j] = 255-TestImage[i][j];
+        }
+    }
+
+    ofstream outStream_Test(TestImageName);
+    TestImage.SavePGM(outStream_Test);
+
 
     //Define some points
     vector<Point2D*> nodes;
 
     //Point2D* p1 = Point2D::makePoint2D(0,0,0);
-    nodes.push_back(Point2D::makePoint2D(0,0,100));
-    nodes.push_back(Point2D::makePoint2D(100,0,200));
-    nodes.push_back(Point2D::makePoint2D(0,100,50));
-    nodes.push_back(Point2D::makePoint2D(100,100,10));
-    nodes.push_back(Point2D::makePoint2D(40,40,120));
-    nodes.push_back(Point2D::makePoint2D(60,60,150));
+
+    // Four corners
+    nodes.push_back(Point2D::makePoint2D(0,0,OriginalImage[0][0]));
+    nodes.push_back(Point2D::makePoint2D(127,0,OriginalImage[127][0]));
+    nodes.push_back(Point2D::makePoint2D(0,127,OriginalImage[0][127]));
+    nodes.push_back(Point2D::makePoint2D(127,127,OriginalImage[127][127]));
+
+    for(int i = 1;i<22;i++)
+        for(int j = 1;j<22;j++)
+        {
+            nodes.push_back(Point2D::makePoint2D(5*i,5*j,OriginalImage[5*i][5*j]));
+        }
+/*    nodes.push_back(Point2D::makePoint2D(10,20,OriginalImage[10][20]));
+    nodes.push_back(Point2D::makePoint2D(30,70,OriginalImage[30][70]));
+    nodes.push_back(Point2D::makePoint2D(10,10,OriginalImage[30][70]));
+    nodes.push_back(Point2D::makePoint2D(100,60,OriginalImage[100][60]));
+    nodes.push_back(Point2D::makePoint2D(40,40,OriginalImage[40][40]));
+    nodes.push_back(Point2D::makePoint2D(60,60,OriginalImage[60][60])); */
 
     Triangulation* tri = Triangulation::makeTriangulation(nodes);
     vector<Edge*> edges = tri->getEdges();
@@ -67,7 +227,7 @@ void test_Triangulations()
     //std::size_t NbCols = 10;
 
 
-    int NbRows = 101, NbCols = 101;
+    int NbRows = 127, NbCols = 127;
     std::vector<std::vector<Point2D*>> pixels(
         NbRows,
         std::vector<Point2D*>(NbCols, nullptr)
@@ -197,6 +357,8 @@ void test()
 int main(int argc, char* argv[]) 
 {
     //test();
+    test_Pointers();
+    exit(-1);
     test_Triangulations();
 
 	int at_alg, iterations, exchange_iterations,exchange_radius,quantization, compressing_options;

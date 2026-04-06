@@ -38,7 +38,7 @@ class M3Matrix
 
   // Constructors
   M3Matrix();
-  M3Matrix(int NbR, int NbC);
+  M3Matrix(int NbRows, int NbCols);
   M3Matrix(int NbRows, int NbCols, const double& r_Value);
 
   // Copy
@@ -82,7 +82,9 @@ class M3Matrix
   // Loading the M3Matrix from a file
   void LoadFromFile(const char* InputFile);
   void LoadFromFileWithoutHeader(const char* InputFile);
-  void LoadYFromPGM(const char* infile);
+  void LoadFromPGM(const char* infile);
+  void LoadFromPGM(const std::string& infile);
+
 
   // Gets the minimal value of the array
   double GetMin();
@@ -105,7 +107,8 @@ class M3Matrix
 
 
   // returns number of bits needed to represent a given number
-  static unsigned int getNumberOfBitsNeeded(unsigned int number) {
+  static unsigned int getNumberOfBitsNeeded(unsigned int number)
+  {
     unsigned int numberOfBits=1;
     while (number>1) { number>>=1; numberOfBits++; }
     return numberOfBits;

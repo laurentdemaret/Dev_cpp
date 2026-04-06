@@ -196,7 +196,8 @@ void M3Matrix::SavePGM(ostream& Out)
   Out << "P2" << endl;
   Out << "#CREATOR : MyProgram" << endl;
 
-  Out << t_NbRows << " " << t_NbCols << endl;
+  //Out << t_NbRows << " " << t_NbCols << endl;
+  Out << t_NbCols << " " << t_NbRows << endl;
   Out << 255 << endl;
 
   Dump(Out);
@@ -640,7 +641,7 @@ void M3Matrix::ExchangeRows(int i1, int i2)
 
 // Fills up the matrix with the luminance values
 // read in a PGM file
-void M3Matrix::LoadYFromPGM(const char* infile)
+void M3Matrix::LoadFromPGM(const char* infile)
 {
   ifstream* pFile;
   pFile = new ifstream(infile);
@@ -725,6 +726,11 @@ void M3Matrix::LoadYFromPGM(const char* infile)
       *pFile >> Data[j][i];
 
   delete pFile;
+}
+
+void M3Matrix::LoadFromPGM(const string& infile)
+{
+    LoadFromPGM(infile.c_str());
 }
 
 

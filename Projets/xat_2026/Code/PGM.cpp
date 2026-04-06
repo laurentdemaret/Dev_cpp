@@ -618,7 +618,7 @@ void PGM::optimize(int NbRows,
 
      // gamma_{k+1} = N_2(s_{k+1})
      tmp1 = 0.;
-     for (i=0;i<p.GetNbRows();i++) tmp1 += s[i][0]*s[i][0];
+     for (i=0;i<(int)p.GetNbRows();i++) tmp1 += s[i][0]*s[i][0];
 
      //
      beta = tmp1/gamma;
