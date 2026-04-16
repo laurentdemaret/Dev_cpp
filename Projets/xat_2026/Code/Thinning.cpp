@@ -198,9 +198,9 @@ double Thinning::calculateError(Triangle* triangle, Point2D* point)
 	int y = point->y;
 	int v = point->f;
 	
-	Point2D* a = triangle->point1;
-	Point2D* b = triangle->point2;
-	Point2D* c = triangle->point3;
+    Point2D* a = triangle->v1;
+    Point2D* b = triangle->v2;
+    Point2D* c = triangle->v3;
 	
 	int ax = a->x;
 	int ay = a->y;
@@ -982,10 +982,10 @@ void Thinning::printTriangles(const string& filename, int option)
   out << this->triangulation->nbCols << endl;
   for (unsigned int i=0; i<triangles.size(); i++) 
 	{
-  	printSingleNode(out,triangles[i]->point1,option);
-  	printSingleNode(out,triangles[i]->point2,option);
-	  printSingleNode(out,triangles[i]->point3,option);
-	  out<<endl;
+    printSingleNode(out,triangles[i]->v1,option);
+    printSingleNode(out,triangles[i]->v2,option);
+    printSingleNode(out,triangles[i]->v3,option);
+    out<<endl;
   }
   out.close();
 }
@@ -1019,12 +1019,12 @@ void Thinning::printTriangulationOff(const string& filename)
 	for (unsigned int i=0; i<triangles.size(); i++) 
 	{
     out << "3 ";
-		int x1 = (int)triangles[i]->point1->x;
-		int y1 = (int)triangles[i]->point1->y;
-		int x2 = (int)triangles[i]->point2->x;
-		int y2 = (int)triangles[i]->point2->y;
-		int x3 = (int)triangles[i]->point3->x;
-		int y3 = (int)triangles[i]->point3->y;
+        int x1 = (int)triangles[i]->v1->x;
+        int y1 = (int)triangles[i]->v1->y;
+        int x2 = (int)triangles[i]->v2->x;
+        int y2 = (int)triangles[i]->v2->y;
+        int x3 = (int)triangles[i]->v3->x;
+        int y3 = (int)triangles[i]->v3->y;
 		out << Indices[x1][y1] << " ";
 		out << Indices[x2][y2] << " ";
 		out << Indices[x3][y3] << " ";
@@ -1100,9 +1100,9 @@ void Thinning::printEps(const string& filename)
 
   for (unsigned int i=0; i<triangles.size(); i++) 
   {
-  	printSingleNodeEPS(out,triangles[i]->point1);
-  	printSingleNodeEPS(out,triangles[i]->point2);
-	printSingleNodeEPS(out,triangles[i]->point3);
+    printSingleNodeEPS(out,triangles[i]->v1);
+    printSingleNodeEPS(out,triangles[i]->v2);
+    printSingleNodeEPS(out,triangles[i]->v3);
 	out<<endl;
   }
 

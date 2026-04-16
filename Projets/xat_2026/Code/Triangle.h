@@ -19,9 +19,10 @@ public:
 	virtual ~Triangle();
 	
 	// attributes
-	Point2D* point1;
-	Point2D* point2;
-	Point2D* point3;
+    // 3 vertices
+    Point2D* v1;
+    Point2D* v2;
+    Point2D* v3;
 	
 	// methods 
 	bool isVertex(Point2D*);

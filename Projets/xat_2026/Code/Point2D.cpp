@@ -487,12 +487,12 @@ void Point2D::VoronoiCell()
     for (unsigned int i = 0; i < DelaunayNeighborTriangles.size(); i++)
     {
         //Coordonnées des trois sommets du triangle
-        double x1 = DelaunayNeighborTriangles[i]->point1->x;
-        double y1 = DelaunayNeighborTriangles[i]->point1->y;
-        double x2 = DelaunayNeighborTriangles[i]->point2->x;
-        double y2 = DelaunayNeighborTriangles[i]->point2->y;
-        double x3 = DelaunayNeighborTriangles[i]->point3->x;
-        double y3 = DelaunayNeighborTriangles[i]->point3->y;
+        double x1 = DelaunayNeighborTriangles[i]->v1->x;
+        double y1 = DelaunayNeighborTriangles[i]->v1->y;
+        double x2 = DelaunayNeighborTriangles[i]->v2->x;
+        double y2 = DelaunayNeighborTriangles[i]->v2->y;
+        double x3 = DelaunayNeighborTriangles[i]->v3->x;
+        double y3 = DelaunayNeighborTriangles[i]->v3->y;
 
         //DelaunayNeighborTriangles[i]->;
         /*for(int j= xMin;j <=xMax;j++)

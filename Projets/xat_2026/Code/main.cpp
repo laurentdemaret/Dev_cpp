@@ -89,15 +89,18 @@ public:
 class ImageMesh
 {
 public:
-    std::vector<std::unique_ptr<TestPoint>> pixels;
-    std::vector<std::unique_ptr<TestPoint>> nodes;
-    std::vector<std::unique_ptr<TestTriangle>> triangles;
+    //std::vector<std::unique_ptr<TestPoint>> pixels;
+    //std::vector<std::unique_ptr<TestPoint>> nodes;
+    //std::vector<std::unique_ptr<TestTriangle>> triangles;
+    std::vector<TestPoint*> pixels;
+    std::vector<TestPoint*> nodes;
+    std::vector<TestTriangle*> triangles;
 
     TestPoint* addPixel(double x, double y)
-    //void addPixel(double x, double y)
     {
-        pixels.push_back(std::make_unique<TestPoint>());
-        auto* p = pixels.back().get();
+        TestPoint* p = new TestPoint(0,0);
+        pixels.push_back(p);
+        //auto* p = pixels.back().get();
         p->x = x;
         p->y = y;
         return p;
@@ -126,6 +129,9 @@ void test_Pointers()
     //points[0]->Dump();
 
     ImageMesh m;
+    m.addPixel(0.,0.);
+    m.addPixel(0.,1.);
+    m.addPixel(1.,1.);
 
     /*TestTriangle* t1 = new TestTriangle();
     TestTriangle* t2 = new TestTriangle();
@@ -163,6 +169,8 @@ void test_Triangulations()
 
     M3Matrix TestImage;
     std::string TestImageName("Out/test.pgm");
+
+
     TestImage = OriginalImage;
     for(int i=0;i<TestImage.GetNbRows();i++)
     {
@@ -207,11 +215,12 @@ void test_Triangulations()
     {
         Triangle* t= triangles.at(i);
         std::cout << "Triangle :" << i<< std::endl;
-        std::cout << "(" << t->point1->x << " , " << t->point1->y << ")" << std::endl;
-        std::cout << "(" << t->point2->x << " , " << t->point2->y << ")" << std::endl;
-        std::cout << "(" << t->point3->x << " , " << t->point3->y << ")" << std::endl;
+        std::cout << "(" << t->v1->x << " , " << t->v1->y << ")" << std::endl;
+        std::cout << "(" << t->v2->x << " , " << t->v2->y << ")" << std::endl;
+        std::cout << "(" << t->v3->x << " , " << t->v3->y << ")" << std::endl;
         std::cout << std::endl;
     }
+
 
     //std::stream
     //std::string();
@@ -228,7 +237,7 @@ void test_Triangulations()
 
 
     int NbRows = 127, NbCols = 127;
-    std::vector<std::vector<Point2D*>> pixels(
+    std::vector<std::vector<Point2D*> > pixels(
         NbRows,
         std::vector<Point2D*>(NbCols, nullptr)
         );
@@ -290,7 +299,6 @@ void test_Triangulations()
     ofstream outStream("image.pgm");
     Image.SavePGM(outStream);
 
-    exit(-1);
     //Implémentation naive revoir l'indexation des pixels ? classe matrix ?
 
 
@@ -331,7 +339,7 @@ void test_Triangulations()
 
     std::cout << "push_back successful ?" << std::endl;
 
-    exit(1);
+   //exit(1);
 }
 
 double my_function_2D(double x)
@@ -353,13 +361,15 @@ void test()
     cout << "y : x^2 " << y << endl;
 }
 
+
 //this is the main for ./xat
 int main(int argc, char* argv[]) 
 {
     //test();
-    test_Pointers();
-    exit(-1);
+    //test_Pointers();
+    //exit(-1);
     test_Triangulations();
+    std::cout << "test_Triangulations done" << std::endl;
 
 	int at_alg, iterations, exchange_iterations,exchange_radius,quantization, compressing_options;
 	int filenames_num;
@@ -446,7 +456,9 @@ int main(int argc, char* argv[])
 	
 	switch (at_alg) 
 	{
-		case 5:
+        //TODO: implement an algorithm with Voronoi cells
+
+        case 5:
 			thinning->thinningAT5(iterations);		
 			break;
 		case 6:
@@ -495,12 +507,15 @@ int main(int argc, char* argv[])
 	
 	string filenameRightAfterThinning = filenameComplete+"_RightAfterThinning.pgm";
 	
-  filenameTriangulationEps+="_TriangulationRAT.eps";
+    filenameTriangulationEps+="_TriangulationRAT.eps";
 	filenameTriangulationOff+="_TriangulationRAT.off";
 	
-  thinning->printTriangulationEps(filenameTriangulationEps);
+    thinning->printTriangulationEps(filenameTriangulationEps);
 	thinning->printTriangulationOff(filenameTriangulationOff);
-	
+
+    //TODO (06/04/2026): test avec un renderTriangulation de type Voronoi
+    //
+
 	PGM::renderTriangulation(image,
 													 thinning->triangulation->nbRows, 
 													 thinning->triangulation->nbCols, 

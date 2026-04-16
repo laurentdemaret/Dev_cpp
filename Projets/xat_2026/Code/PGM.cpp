@@ -245,43 +245,43 @@ void PGM::renderTriangulation(M3Matrix& image,
   for ( unsigned int i = 0; i < dtta.size(); i++) 
 	{
 		//Following lines added for anisotropic diffusion 19/10/2010
-		fixed[dtta[i]->point1->x][dtta[i]->point1->y] = true;
-		fixed[dtta[i]->point1->x][dtta[i]->point2->y] = true;
-		fixed[dtta[i]->point1->x][dtta[i]->point3->y] = true;
-		//end of addition 19/10/2010
+        fixed[dtta[i]->v1->x][dtta[i]->v1->y] = true;
+        fixed[dtta[i]->v2->x][dtta[i]->v2->y] = true;
+        fixed[dtta[i]->v3->x][dtta[i]->v3->y] = true;
+        //end of addition 19/10/2010 (corrected 06/04/2026, to be possibly checked)
 		
     // Warning : This is true only with integer coordinates
-    xmin = dtta[i]->point1->x;
-    ymin = dtta[i]->point1->y;
-    if ( dtta[i]->point2->x < xmin ) xmin = dtta[i]->point2->x;
-    if ( dtta[i]->point3->x < xmin ) xmin = dtta[i]->point3->x;
-    if ( dtta[i]->point2->y < ymin ) ymin = dtta[i]->point2->y;
-    if ( dtta[i]->point3->y < ymin ) ymin = dtta[i]->point3->y;
+    xmin = dtta[i]->v1->x;
+    ymin = dtta[i]->v1->y;
+    if ( dtta[i]->v2->x < xmin ) xmin = dtta[i]->v2->x;
+    if ( dtta[i]->v3->x < xmin ) xmin = dtta[i]->v3->x;
+    if ( dtta[i]->v2->y < ymin ) ymin = dtta[i]->v2->y;
+    if ( dtta[i]->v3->y < ymin ) ymin = dtta[i]->v3->y;
 
-    xmax = dtta[i]->point1->x;
-    ymax = dtta[i]->point1->y;
-    if ( dtta[i]->point2->x > xmax ) xmax = dtta[i]->point2->x;
-    if ( dtta[i]->point3->x > xmax ) xmax = dtta[i]->point3->x;
-    if ( dtta[i]->point2->y > ymax ) ymax = dtta[i]->point2->y;
-    if ( dtta[i]->point3->y > ymax ) ymax = dtta[i]->point3->y;
+    xmax = dtta[i]->v1->x;
+    ymax = dtta[i]->v1->y;
+    if ( dtta[i]->v2->x > xmax ) xmax = dtta[i]->v2->x;
+    if ( dtta[i]->v3->x > xmax ) xmax = dtta[i]->v3->x;
+    if ( dtta[i]->v2->y > ymax ) ymax = dtta[i]->v2->y;
+    if ( dtta[i]->v3->y > ymax ) ymax = dtta[i]->v3->y;
 
     // det = determinant; ba, bb, bc barycentric coordinates of p
-    det = (dtta[i]->point1->x*(dtta[i]->point2->y-dtta[i]->point3->y)) + 
-    		(dtta[i]->point2->x*(dtta[i]->point3->y-dtta[i]->point1->y)) + 
-    			(dtta[i]->point3->x*(dtta[i]->point1->y-dtta[i]->point2->y));
+    det = (dtta[i]->v1->x*(dtta[i]->v2->y-dtta[i]->v3->y)) +
+            (dtta[i]->v2->x*(dtta[i]->v3->y-dtta[i]->v1->y)) +
+                (dtta[i]->v3->x*(dtta[i]->v1->y-dtta[i]->v2->y));
 
 	// loop on all the points of the triangle
 	for (int dx=xmin;dx<=xmax;dx++) {
 		for (int dy=ymin;dy<=ymax;dy++) {
 			
-	        ba = (dx*(dtta[i]->point2->y-dtta[i]->point3->y) + dtta[i]->point2->x*(dtta[i]->point3->y-dy) + dtta[i]->point3->x*(dy-dtta[i]->point2->y))/det;
+            ba = (dx*(dtta[i]->v2->y-dtta[i]->v3->y) + dtta[i]->v2->x*(dtta[i]->v3->y-dy) + dtta[i]->v3->x*(dy-dtta[i]->v2->y))/det;
 	        if(ba<0) continue;
-	        bb = (dtta[i]->point1->x*(dy-dtta[i]->point3->y) + dx*(dtta[i]->point3->y-dtta[i]->point1->y) + dtta[i]->point3->x*(dtta[i]->point1->y-dy))/det;
+            bb = (dtta[i]->v1->x*(dy-dtta[i]->v3->y) + dx*(dtta[i]->v3->y-dtta[i]->v1->y) + dtta[i]->v3->x*(dtta[i]->v1->y-dy))/det;
 	        if(bb<0) continue;
-	        bc = (dtta[i]->point1->x*(dtta[i]->point2->y-dy) + dtta[i]->point2->x*(dy-dtta[i]->point1->y) + dx*(dtta[i]->point1->y-dtta[i]->point2->y))/det;
+            bc = (dtta[i]->v1->x*(dtta[i]->v2->y-dy) + dtta[i]->v2->x*(dy-dtta[i]->v1->y) + dx*(dtta[i]->v1->y-dtta[i]->v2->y))/det;
 			if(bc<0) continue;
 			// get L(f,Ty) and epsilon
-			val = (ba*dtta[i]->point1->f)+(bb*dtta[i]->point2->f)+(bc*dtta[i]->point3->f);
+            val = (ba*dtta[i]->v1->f)+(bb*dtta[i]->v2->f)+(bc*dtta[i]->v3->f);
 			if (val<0.)   val=0.;
 			if (val>255.) val=255.;
 			// WARNING : to be tested on non square images
@@ -381,12 +381,12 @@ void PGM::optimize(int NbRows,
   int xa, xb, xc, ya, yb, yc;
   for (int i=0;i<trlen;i++) 
 	{
-    xa = dtta[i]->point1->x;
-    ya = dtta[i]->point1->y;
-    xb = dtta[i]->point2->x;
-    yb = dtta[i]->point2->y;
-    xc = dtta[i]->point3->x;
-    yc = dtta[i]->point3->y;
+    xa = dtta[i]->v1->x;
+    ya = dtta[i]->v1->y;
+    xb = dtta[i]->v2->x;
+    yb = dtta[i]->v2->y;
+    xc = dtta[i]->v3->x;
+    yc = dtta[i]->v3->y;
 
     ab =0.;
     ac =0.;
@@ -633,13 +633,13 @@ void PGM::optimize(int NbRows,
 
   for (int i=0;i<trlen;i++) 
 	{
-    int ia = DBL2INT(PointPosition[dtta[i]->point1->x][dtta[i]->point1->y]);
-    int ib = DBL2INT(PointPosition[dtta[i]->point2->x][dtta[i]->point2->y]);
-    int ic = DBL2INT(PointPosition[dtta[i]->point3->x][dtta[i]->point3->y]);
+    int ia = DBL2INT(PointPosition[dtta[i]->v1->x][dtta[i]->v1->y]);
+    int ib = DBL2INT(PointPosition[dtta[i]->v2->x][dtta[i]->v2->y]);
+    int ic = DBL2INT(PointPosition[dtta[i]->v3->x][dtta[i]->v3->y]);
 
-    dtta[i]->point1->f = X[ia][0];
-    dtta[i]->point2->f = X[ib][0];
-    dtta[i]->point3->f = X[ic][0];
+    dtta[i]->v1->f = X[ia][0];
+    dtta[i]->v2->f = X[ib][0];
+    dtta[i]->v3->f = X[ic][0];
   }
   
 	cout << "[End of optimize. XDump()]" << endl;

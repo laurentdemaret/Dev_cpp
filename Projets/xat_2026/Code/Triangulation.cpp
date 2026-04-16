@@ -840,16 +840,16 @@ vector<Edge*> Triangulation::insertPoint(Point2D* point)
 	cell.insert(thinnedEdge3);
 	vector<Triangle*> cellTriangles;
 	cellTriangles.push_back(Triangle::makeTriangle(thinned));
-	neighbors.insert(thinned->point1);
-	neighbors.insert(thinned->point2);
-	neighbors.insert(thinned->point3);
+    neighbors.insert(thinned->v1);
+    neighbors.insert(thinned->v2);
+    neighbors.insert(thinned->v3);
 
 	// check if point is on an edge 
 	Triangle* adj = NULL;
 	Edge* adjEdge = NULL;
 
 	// edge 1 
-	if( point->crossProduct(thinned->point1,thinned->point2) == 0 )
+    if( point->crossProduct(thinned->v1,thinned->v2) == 0 )
 	{
 		adj = thinned->getNeighbourByEdge(thinnedEdge1); 
 		if(adj != NULL){
@@ -871,7 +871,7 @@ vector<Edge*> Triangulation::insertPoint(Point2D* point)
 		}
 	}			
 	// edge 2 
-	else if( point->crossProduct(thinned->point2,thinned->point3) == 0 ){
+    else if( point->crossProduct(thinned->v2,thinned->v3) == 0 ){
 		adj = thinned->getNeighbourByEdge(thinnedEdge2); 
 		if(adj != NULL){
 			adjEdge = thinnedEdge2;
@@ -892,7 +892,7 @@ vector<Edge*> Triangulation::insertPoint(Point2D* point)
 		}
 	}			
 	// edge 3 
-	else if( point->crossProduct(thinned->point1,thinned->point3) == 0 )
+    else if( point->crossProduct(thinned->v1,thinned->v3) == 0 )
 	{
 		adj = thinned->getNeighbourByEdge(thinnedEdge3); 
 		if(adj != NULL)
@@ -922,9 +922,9 @@ vector<Edge*> Triangulation::insertPoint(Point2D* point)
 		cell.insert(edge1);
 		cell.insert(edge2);
 		cell.insert(edge3);
-		neighbors.insert(adj->point1);
-		neighbors.insert(adj->point2);
-		neighbors.insert(adj->point3);
+        neighbors.insert(adj->v1);
+        neighbors.insert(adj->v2);
+        neighbors.insert(adj->v3);
 		cell.erase(adjEdge);
 		adjEdge->deleteEdgeInsideCell(cell);
 		this->removeEdgeFromLinkedList(adjEdge);
@@ -1222,12 +1222,12 @@ void Triangulation::optimize()
 	vector<Triangle*> triangles = this->getTriangles();
 	for(unsigned int t = 0;t<triangles.size();t++) {
 
-		xa = triangles[t]->point1->x;
-		ya = triangles[t]->point1->y;
-		xb = triangles[t]->point2->x;
-		yb = triangles[t]->point2->y;
-		xc = triangles[t]->point3->x;
-		yc = triangles[t]->point3->y;
+        xa = triangles[t]->v1->x;
+        ya = triangles[t]->v1->y;
+        xb = triangles[t]->v2->x;
+        yb = triangles[t]->v2->y;
+        xc = triangles[t]->v3->x;
+        yc = triangles[t]->v3->y;
 
 		ab =0.;
 		ac =0.;
@@ -1466,17 +1466,17 @@ void Triangulation::optimize()
 
 	for(unsigned int t = 0; t<triangles.size();t++) 
 	{
-		int ia = (int)(PointPosition[triangles[t]->point1->x][triangles[t]->point1->y]);
-		int ib = (int)(PointPosition[triangles[t]->point2->x][triangles[t]->point2->y]);
-		int ic = (int)(PointPosition[triangles[t]->point3->x][triangles[t]->point3->y]);
+        int ia = (int)(PointPosition[triangles[t]->v1->x][triangles[t]->v1->y]);
+        int ib = (int)(PointPosition[triangles[t]->v2->x][triangles[t]->v2->y]);
+        int ic = (int)(PointPosition[triangles[t]->v3->x][triangles[t]->v3->y]);
 
 		int av = (int)(X[ia][0]);
 		int bv = (int)(X[ib][0]);
 		int cv = (int)(X[ic][0]);
 
-		triangles[t]->point1->f = (av<0)? 0 : (av>255)? 255 : av;
-		triangles[t]->point2->f = (bv<0)? 0 : (bv>255)? 255 : bv;
-		triangles[t]->point3->f = (cv<0)? 0 : (cv>255)? 255 : cv;
+        triangles[t]->v1->f = (av<0)? 0 : (av>255)? 255 : av;
+        triangles[t]->v2->f = (bv<0)? 0 : (bv>255)? 255 : bv;
+        triangles[t]->v3->f = (cv<0)? 0 : (cv>255)? 255 : cv;
 	}
 }	
 
@@ -1527,6 +1527,7 @@ void Triangulation::checkTri()
 	}
 	
 }
+
 
 vector<Point2D*> Triangulation::getThinnedNodes()
 {

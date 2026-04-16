@@ -11,16 +11,16 @@ int Triangle::new_triangle_cnt = 0;
 void Triangle::initTriangle(Point2D* p1, Point2D* p2, Point2D* p3)
 {
 	// points in counter clockwise
-	this->point1 = p1;
-	if(point1->ccw(p2,p3))
+    this->v1 = p1;
+    if(v1->ccw(p2,p3))
 	{
-		this->point2 = p2;
-		this->point3 = p3;
+        this->v2 = p2;
+        this->v3 = p3;
 	}
 	else
 	{
-		this->point2 = p3;
-		this->point3 = p2;
+        this->v2 = p3;
+        this->v3 = p2;
 	}
 }
 
@@ -49,9 +49,9 @@ void Triangle::deleteTriangles(vector<Triangle*> triangles)
 void Triangle::deleteTriangle()
 {
 	// refactor triangle 
-	this->point1 = NULL;	
-	this->point2 = NULL;
-	this->point3 = NULL;
+    this->v1 = NULL;
+    this->v2 = NULL;
+    this->v3 = NULL;
 
 	if(Triangle::pool.size() < TRIANGLE_POOL_SIZE)
 	{
@@ -80,7 +80,7 @@ Triangle* Triangle::makeTriangle(Point2D* p1,Point2D* p2,Point2D* p3)
 
 Triangle* Triangle::makeTriangle(Triangle* triangle)
 {
-	return Triangle::makeTriangle(triangle->point1,triangle->point2,triangle->point3);
+    return Triangle::makeTriangle(triangle->v1,triangle->v2,triangle->v3);
 }
 
 
@@ -91,7 +91,7 @@ Triangle* Triangle::makeTriangle(Edge* edge,Point2D* point3)
 
 bool Triangle::isVertex(Point2D* p)
 {
-	return (this->point1 == p) || (this->point2 == p) || (this->point3 == p);
+    return (this->v1 == p) || (this->v2 == p) || (this->v3 == p);
 }
 
 
@@ -104,9 +104,9 @@ bool Triangle::insideTriangle(Point2D* point)
 // attribute ??
 int Triangle::xMin()
 {
-    int xMin = point1->x;
-    if(point2->x < xMin) xMin = point2->x;
-    if(point3->x < xMin) xMin = point3->x;
+    int xMin = v1->x;
+    if(v2->x < xMin) xMin = v2->x;
+    if(v3->x < xMin) xMin = v3->x;
 
     return xMin;
 }
@@ -131,25 +131,25 @@ int Triangle::yMax()
 // parameters: point1, point2, point3
 bool Triangle::insideTriangle(double px, double py)
 {
-	int p1x = this->point1->x;
-	int p1y = this->point1->y;
+    int p1x = this->v1->x;
+    int p1y = this->v1->y;
 	
 	int p2x;
 	int p2y;
 	int p3x;
 	int p3y;
-	if(this->point1->ccw(this->point2,this->point3))
+    if(this->v1->ccw(this->v2,this->v3))
 	{
-		p2x = this->point2->x;
-		p2y = this->point2->y;
-		p3x = this->point3->x;
-		p3y = this->point3->y;
+        p2x = this->v2->x;
+        p2y = this->v2->y;
+        p3x = this->v3->x;
+        p3y = this->v3->y;
 	}
 	else{
-		p2x = this->point3->x;
-		p2y = this->point3->y;
-		p3x = this->point2->x;
-		p3y = this->point2->y;
+        p2x = this->v3->x;
+        p2y = this->v3->y;
+        p3x = this->v2->x;
+        p3y = this->v2->y;
 	}
 
 	double ab = (py-p1y)*(p2x-p1x) - 
@@ -176,45 +176,45 @@ bool Triangle::insideTriangle(double px, double py)
 void Triangle::getEdges(Edge** e1,Edge** e2,Edge** e3)
 {
 	int count = 0;
-	Edge* entry = this->point1->entry;
-	if(entry->isVertex(this->point2))
+    Edge* entry = this->v1->entry;
+    if(entry->isVertex(this->v2))
 	{
 		*e1 = entry;
 		count++;
 	}
-	if(entry->isVertex(this->point3))
+    if(entry->isVertex(this->v3))
 	{
 		*e3 = entry;
 		count++;
 	}		
-	Edge* orbit = entry->getNext(this->point1);
+    Edge* orbit = entry->getNext(this->v1);
 	while ( count < 2 && orbit != entry ) 
 	{
-		if(orbit->isVertex(this->point2))
+        if(orbit->isVertex(this->v2))
 		{
 			*e1 = orbit;
 			count++;
 		}
-		if( orbit->isVertex(this->point3))
+        if( orbit->isVertex(this->v3))
 		{
 			*e3 = orbit;
 			count++;
 		}
-		orbit = orbit->getNext(this->point1);
+        orbit = orbit->getNext(this->v1);
 	}
-	entry = this->point2->entry;
-	if(entry->isVertex(this->point3))
+    entry = this->v2->entry;
+    if(entry->isVertex(this->v3))
 	{
 		*e2 = entry;
 	}		
-	orbit = entry->getNext(this->point2);
+    orbit = entry->getNext(this->v2);
 	while ( orbit != entry ) {
-		if( orbit->isVertex(this->point3) )
+        if( orbit->isVertex(this->v3) )
 		{
 			*e2 = orbit;
 			break;
 		}
-		orbit = orbit->getNext(this->point2);
+        orbit = orbit->getNext(this->v2);
 	}
 }
 
@@ -232,19 +232,19 @@ void Triangle::getEdges(Edge** e1,Edge** e2,Edge** e3)
 
 Point2D* Triangle::getOtherPoint(Point2D* a, Point2D* b)
 {
-	if(this->point1 != a 
-	&& this->point1 != b )
+    if(this->v1 != a
+    && this->v1 != b )
 	{
-		return this->point1;
+        return this->v1;
 	}
-	if( this->point2 != a 
-	&&  this->point2 != b )
+    if( this->v2 != a
+    &&  this->v2 != b )
 	{
-		return this->point2;
+        return this->v2;
 	}
 	else
 	{
-		return this->point3;
+        return this->v3;
 	}
 }
 
@@ -259,9 +259,9 @@ Point2D* Triangle::getVoronoiCentroid(Point2D* p)
     double d1, d2, d3, d;
 
     int indx_nn = 1;
-    d1 = ((*this).point1->x -p->x)*((*this).point1->x -p->x) + ((*this).point1->y -p->y)*((*this).point1->y -p->y);
-    d2 = ((*this).point2->x -p->x)*((*this).point2->x -p->x) + ((*this).point2->y -p->y)*((*this).point2->y -p->y);
-    d3 = ((*this).point3->x -p->x)*((*this).point3->x -p->x) + ((*this).point3->y -p->y)*((*this).point3->y -p->y);
+    d1 = ((*this).v1->x -p->x)*((*this).v1->x -p->x) + ((*this).v1->y -p->y)*((*this).v1->y -p->y);
+    d2 = ((*this).v2->x -p->x)*((*this).v2->x -p->x) + ((*this).v2->y -p->y)*((*this).v2->y -p->y);
+    d3 = ((*this).v3->x -p->x)*((*this).v3->x -p->x) + ((*this).v3->y -p->y)*((*this).v3->y -p->y);
     d=d1;
     if(d2<d)
     {
@@ -277,15 +277,15 @@ Point2D* Triangle::getVoronoiCentroid(Point2D* p)
 
     if(indx_nn == 1)
     {
-        return this->point1;
+        return this->v1;
     }
     if(indx_nn == 2)
     {
-        return this->point2;
+        return this->v2;
     }
     if(indx_nn == 3)
     {
-        return this->point3;
+        return this->v3;
     }
 }
 
@@ -346,12 +346,12 @@ Point2D* Triangle::getNeighbourPointByEdge(Edge* edge)
 
 double Triangle::GetArea()
 {	
-	double ax = (double)(this->point1->x);
-	double ay = (double)(this->point1->y);
-	double bx = (double)(this->point2->x);
-	double by = (double)(this->point2->y);
-	double cx = (double)(this->point3->x);
-	double cy = (double)(this->point3->y);
+    double ax = (double)(this->v1->x);
+    double ay = (double)(this->v1->y);
+    double bx = (double)(this->v2->x);
+    double by = (double)(this->v2->y);
+    double cx = (double)(this->v3->x);
+    double cy = (double)(this->v3->y);
 
 	double area =  0.5*((ax-cx)*(by-cy)-(ay-cy)*(bx-cx)); 
 	
@@ -365,12 +365,12 @@ double Triangle::GetAspectRatio()
 	double aspectratio=0.;
 
 	
-	double ax = (double)(this->point1->x);
-	double ay = (double)(this->point1->y);
-	double bx = (double)(this->point2->x);
-	double by = (double)(this->point2->y);
-	double cx = (double)(this->point3->x);
-	double cy = (double)(this->point3->y);
+    double ax = (double)(this->v1->x);
+    double ay = (double)(this->v1->y);
+    double bx = (double)(this->v2->x);
+    double by = (double)(this->v2->y);
+    double cx = (double)(this->v3->x);
+    double cy = (double)(this->v3->y);
 	
 	//compute the edge lengths of the triangle
 	double l1 = sqrt((bx-ax)*(bx-ax)+(by-ay)*(by-ay));
@@ -393,7 +393,7 @@ double Triangle::GetAspectRatio()
 
 void Triangle::debug()
 {
-	cout<<this->point1->x<<","<<this->point1->y<<"-"<<this->point2->x<<","<<this->point2->y<<"-"<<this->point3->x<<","<<this->point3->y<<endl;
+    cout<<this->v1->x<<","<<this->v1->y<<"-"<<this->v2->x<<","<<this->v2->y<<"-"<<this->v3->x<<","<<this->v3->y<<endl;
 }
 
 

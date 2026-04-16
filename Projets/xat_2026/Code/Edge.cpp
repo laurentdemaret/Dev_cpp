@@ -399,9 +399,9 @@ bool Edge::checkEdge(Triangle* triangle, int level)
 		Edge* ed = adjPoint->getEdge(pd);
 		Point2D* point = triangle->getOtherPoint(this);
 		
-		switch (adjPoint->inCircle(triangle->point1,
-									triangle->point2,
-									triangle->point3 )) {
+        switch (adjPoint->inCircle(triangle->v1,
+                                    triangle->v2,
+                                    triangle->v3 )) {
 		case 1:
 			this->swap();
 			to = Triangle::makeTriangle(po,point,adjPoint);
