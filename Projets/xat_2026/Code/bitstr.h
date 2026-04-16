@@ -155,7 +155,7 @@ class RBitStream:public BitStream
   // Reading float
    float ReadFloat();
 
-  // Reading float
+  // Reading double
    double ReadDouble();
 
   // Reading 8 bits (i.e. a byte)

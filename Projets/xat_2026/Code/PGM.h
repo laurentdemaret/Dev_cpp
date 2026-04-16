@@ -2,9 +2,6 @@
 #define PGM_H_
 
 #include <vector>
-/*#include "../triangulation/PointGrid.h"
-#include "../tools/matrix/matrix.h"
-#include "../triangulation/Triangulation.h"*/
 #include "PointGrid.h"
 #include "matrix.h"
 #include "Triangulation.h"

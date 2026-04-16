@@ -35,6 +35,7 @@ SOURCES += \
     PointGrid.cpp \
     Triangle.cpp \
     Triangulation.cpp \
+    VoronoiCell.cpp \
     Test.cpp
 
 # Fichiers headers
@@ -54,6 +55,7 @@ HEADERS += \
     PointGrid.h \
     Triangle.h \
     Triangulation.h \
+    VoronoiCell.h \
     Test.h
 
 # Options de compilation

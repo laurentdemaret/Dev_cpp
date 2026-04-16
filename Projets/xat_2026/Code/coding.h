@@ -8,10 +8,6 @@
 #include <fstream>
 #include <vector>
 
-/*#include "../triangulation/Point2D.h"
-#include "../tools/matrix/matrix.h"
-#include "../tools/matrix/bitstr.h"*/
-
 #include "Point2D.h"
 #include "matrix.h"
 #include "bitstr.h"

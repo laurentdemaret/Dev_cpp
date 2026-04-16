@@ -68,6 +68,7 @@ SOURCES       = ../../main.cpp \
 		../../PointGrid.cpp \
 		../../Triangle.cpp \
 		../../Triangulation.cpp \
+		../../VoronoiCell.cpp \
 		../../Test.cpp 
 OBJECTS       = main.o \
 		IO.o \
@@ -85,6 +86,7 @@ OBJECTS       = main.o \
 		PointGrid.o \
 		Triangle.o \
 		Triangulation.o \
+		VoronoiCell.o \
 		Test.o
 DIST          = /usr/local/share/qt/mkspecs/features/spec_pre.prf \
 		/usr/local/share/qt/mkspecs/features/device_config.prf \
@@ -466,6 +468,7 @@ DIST          = /usr/local/share/qt/mkspecs/features/spec_pre.prf \
 		PointGrid.h \
 		Triangle.h \
 		Triangulation.h \
+		VoronoiCell.h \
 		Test.h ../../main.cpp \
 		../../IO.cpp \
 		../../PGM.cpp \
@@ -482,6 +485,7 @@ DIST          = /usr/local/share/qt/mkspecs/features/spec_pre.prf \
 		../../PointGrid.cpp \
 		../../Triangle.cpp \
 		../../Triangulation.cpp \
+		../../VoronoiCell.cpp \
 		../../Test.cpp
 QMAKE_TARGET  = xat
 DESTDIR       = /Users/laurentdemaret/bin/
@@ -1388,6 +1392,12 @@ Triangulation.o: ../../Triangulation.cpp ../../Triangulation.h \
 		../../Triangle.h \
 		../../Test.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Triangulation.o ../../Triangulation.cpp
+
+VoronoiCell.o: ../../VoronoiCell.cpp ../../Point2D.h \
+		../../Edge.h \
+		../../Triangle.h \
+		../../VoronoiCell.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o VoronoiCell.o ../../VoronoiCell.cpp
 
 Test.o: ../../Test.cpp ../../Test.h \
 		../../Point2D.h \
