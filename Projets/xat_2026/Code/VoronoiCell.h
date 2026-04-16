@@ -15,6 +15,7 @@ class VoronoiCell
 {
 public:
 	// constructors/destructors
+    //VoronoiCell();
     //Point2D();
     //Point2D(int, int);
     //Point2D(int, int, int);
@@ -26,7 +27,9 @@ public:
     Point2D* Centroid;
 
     std::vector<Point2D*> pixels;
-	
+
+    void CellFromCentroid();
+
 	std::vector<Triangle*> getTriangles();
 	std::vector<Edge*> getEdges();
 	Edge* getEdge(Point2D* b);

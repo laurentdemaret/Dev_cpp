@@ -12,3 +12,7 @@
 
 using namespace std;
 
+void VoronoiCell::CellFromCentroid()
+{
+//TODO: copier de Point2D.h
+}
