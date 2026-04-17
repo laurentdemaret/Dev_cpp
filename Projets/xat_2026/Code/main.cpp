@@ -86,6 +86,7 @@ public:
 };
 
 
+//Classe pour tester pas vraiment utile
 class ImageMesh
 {
 public:
@@ -157,6 +158,9 @@ void test_Pointers()
 }
 
 
+// *************************************
+// Test Triangulations: ajouté nov. 25
+// *************************************
 void test_Triangulations()
 {
     std::cout << "test Triangulations" << std::endl;
@@ -210,6 +214,23 @@ void test_Triangulations()
     Triangulation* tri = Triangulation::makeTriangulation(nodes);
     vector<Edge*> edges = tri->getEdges();
     vector<Triangle*> triangles = tri->getTriangles(edges);
+
+    vector<Point2D*> test_attached_points = tri->getAttachedPoints(nodes[0]);
+
+    cout << endl;
+    cout << endl;
+    cout << "********************************"<< endl;
+    cout << "********************************"<< endl;
+    cout << "nodes[0] : " << nodes[0]->x << ", " << nodes[0]->y << ":" << nodes[0]->f  << endl;
+    cout << "voici les coordonnées des points attaches à nodes[0]:"<< endl;
+
+    for(int i = 0;i <(int) test_attached_points.size();i++)
+    {
+        cout << "test_attached_points["<<i<<"] : " << test_attached_points[i]->x << ", " << test_attached_points[i]->y<< ":" << test_attached_points[i]->f  << endl;
+
+    }
+
+    exit(-1);
 
     for(int i = 0;i<triangles.size();i++)
     {
