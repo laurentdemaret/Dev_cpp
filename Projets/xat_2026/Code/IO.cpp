@@ -111,9 +111,9 @@ char** parse_command_line_at_and_compress(int argc,
     tmp=-1;
     stop_char=0;
     opt=argv[optind];
-    if (*opt == '-') /* an option */ 
+    if (*opt == '-') // an option
 		{
-      opt++; /* skip trailing '-' */
+      opt++; // skip trailing '-'
       switch (*opt) 
 			{
       case 'a':
@@ -146,6 +146,12 @@ char** parse_command_line_at_and_compress(int argc,
 		opt++;
 		PARSE_ARGUMENT("-q") *quantization=tmp;
 		break;
+      case 'T':
+      case 't':
+          opt++;
+          *action_key=(char*)"test";
+          break;
+
       case '\0': cerr << "Warning: no option specified after '-', ignoring..." << endl; break;
       default:
 	while (*opt!='\0') {

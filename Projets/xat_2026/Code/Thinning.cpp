@@ -821,7 +821,7 @@ void Thinning::calculatePairSignificance(Point2D* point)
 	}
 
 	
-	/* remove current point */
+    // remove current point
 	Point2D* bestNeighbor = NULL;
 	double bestDiff = 0.;
 	double eps1 = point->epsilon;

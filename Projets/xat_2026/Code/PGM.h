@@ -14,11 +14,18 @@ public:
 	
 	// methods 
 	static PointGrid* readFile(const char*);
-	static void renderTriangulation(M3Matrix&, 
-										 int, 
-										 int, 
-										 const char* , 
-										 std::vector<Triangle*>);	
+    static void renderTriangulation(M3Matrix&,
+                                         int NbRows,
+                                         int NbCols,
+                                         const char*  outputFilename,
+                                         std::vector<Triangle*>);
+
+    static void renderVoronoi(M3Matrix& image,
+                            int NbRows,
+                            int NbCols,
+                            const char*  outputFilename,
+                              std::vector<Triangle*> dtta);
+
 	static void optimize(int, 
 								int, 
 								M3Matrix&, 

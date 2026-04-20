@@ -111,22 +111,41 @@ int Triangle::xMin()
     return xMin;
 }
 
-/*int Triangle::yMin()
+int Triangle::yMin()
 {
+    int yMin = v1->y;
+    if(v2->y < yMin) yMin = v2->y;
+    if(v3->y < yMin) yMin = v3->y;
 
+    return yMin;
 }
 
 int Triangle::xMax()
 {
+    int xMax= v1->x;
+    if(v2->x > xMax) xMax = v2->x;
+    if(v3->x > xMax) xMax = v3->x;
 
+    return xMax;
 }
 
 int Triangle::yMax()
 {
+    int yMax= v1->y;
+    if(v2->y > yMax) yMax = v2->y;
+    if(v3->y > yMax) yMax = v3->y;
 
-}*/
+    return yMax;
+}
 
-// check if this point inside or on one edge 
+double Triangle::Det()
+{
+    double det = (v2->x - v1->x)*(v3->y-v1->y) - (v2->y-v1->y)*(v3->x-v1->x);
+
+    return det;
+}
+
+// check if thispoint inside or on one edge
 // of the triangle builded by the 3 points
 // parameters: point1, point2, point3
 bool Triangle::insideTriangle(double px, double py)
@@ -254,9 +273,49 @@ Point2D* Triangle::getOtherPoint(Edge* edge)
 	return this->getOtherPoint(edge->org, edge->dest);
 }
 
-Point2D* Triangle::getVoronoiCentroid(Point2D* p)
+
+Point2D* Triangle::getVoronoiCentroid(int px, int py)
 {
     double d1, d2, d3, d;
+
+    int indx_nn = 1;
+    d1 = ((*this).v1->x -px)*((*this).v1->x -px) + ((*this).v1->y -py)*((*this).v1->y -py);
+    d2 = ((*this).v2->x -px)*((*this).v2->x -px) + ((*this).v2->y -py)*((*this).v2->y -py);
+    d3 = ((*this).v3->x -px)*((*this).v3->x -px) + ((*this).v3->y -py)*((*this).v3->y -py);
+    d=d1;
+    if(d2<d)
+    {
+        d=d2;
+        indx_nn = 2;
+    }
+
+    if(d3<d)
+    {
+        d=d3;
+        indx_nn = 3;
+    }
+
+    if(indx_nn == 1)
+    {
+        return this->v1;
+    }
+    if(indx_nn == 2)
+    {
+        return this->v2;
+    }
+    if(indx_nn == 3)
+    {
+        return this->v3;
+    }
+
+}
+
+
+
+Point2D* Triangle::getVoronoiCentroid(Point2D* p)
+{
+    return getVoronoiCentroid(p->x,p->y);
+    /*double d1, d2, d3, d;
 
     int indx_nn = 1;
     d1 = ((*this).v1->x -p->x)*((*this).v1->x -p->x) + ((*this).v1->y -p->y)*((*this).v1->y -p->y);
@@ -286,7 +345,7 @@ Point2D* Triangle::getVoronoiCentroid(Point2D* p)
     if(indx_nn == 3)
     {
         return this->v3;
-    }
+    }*/
 }
 
 Triangle* Triangle::getNeighbourByEdge(Edge *edge)

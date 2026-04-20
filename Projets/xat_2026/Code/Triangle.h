@@ -42,7 +42,7 @@ public:
 	Triangle* getNeighbourByEdge(Edge*);
 	Point2D* getNeighbourPointByEdge(Edge* edge);
     Point2D* getVoronoiCentroid(Point2D* p);
-
+    Point2D* getVoronoiCentroid(int x, int y);
 
 	double GetArea();
     double GetAspectRatio();
@@ -54,6 +54,8 @@ public:
 
 	static std::vector<Triangle*> pool;
 
+
+    double Det();
 
     int xMin();
     int yMin();

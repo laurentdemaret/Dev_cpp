@@ -23,6 +23,15 @@
 
 using namespace std;
 
+// **********************************************
+// * Liste von Todos (Stand: 20.04.26)
+// 1 - Check rows and cols
+// 2 - Vereinfachung der I/O Funktionalitäten
+// 3 - Print (in eps Format) die Voronoi-Zellen
+// 4 - Liste der Voronoi Zelle Pixeln -> direkt in die Klasse rein (aktuell noch nicht)
+// 5 - Berechnung des Aktualisierungsfehlers ()
+// **********************************************
+
 
 class TestTriangle;
 
@@ -215,6 +224,7 @@ void test_Triangulations()
     vector<Edge*> edges = tri->getEdges();
     vector<Triangle*> triangles = tri->getTriangles(edges);
 
+
     vector<Point2D*> test_attached_points = tri->getAttachedPoints(nodes[0]);
 
     cout << endl;
@@ -389,15 +399,13 @@ int main(int argc, char* argv[])
     //test();
     //test_Pointers();
     //exit(-1);
-    test_Triangulations();
-    std::cout << "test_Triangulations done" << std::endl;
 
 	int at_alg, iterations, exchange_iterations,exchange_radius,quantization, compressing_options;
 	int filenames_num;
 	M3Matrix image;
 	char* action_key;
 
-    std::cout << "Version portable de at (15 nov. 2025)" << std::endl;
+    std::cout << "Version portable de at (20/04/2026)" << std::endl;
 
 	char** filenames = parse_command_line_at_and_compress(argc,argv,
 														&at_alg,
@@ -408,7 +416,15 @@ int main(int argc, char* argv[])
 														&compressing_options, 
 														&action_key,
 														&filenames_num);
-	
+
+
+    if( strcasecmp(action_key,"test") == 0 )
+    {
+        cout<<"[test]"<<endl;
+        test_Triangulations();
+        std::cout << "test_Triangulations done" << std::endl;
+    }
+
 	if ( filenames_num == 0 ) 
 	{
 		cerr << "Error: no file to process, aborting..." << endl;
@@ -420,11 +436,13 @@ int main(int argc, char* argv[])
 	// output 
 	string filename = stripExtension(filenames[0]);
 	
-	// action = reconstruct 
+    // action = reconstruct
+    // TODO: add a typical command line
 	if( strcasecmp(action_key,"reconstruct") == 0 )
 	{
         cout<<"[reconstruct]"<<endl;
         // read nodes
+        //TODO: which formate is expected ?
 		ifstream input(filenames[0]);
 		//assert(input.is_open());
 		int r,c,s;
@@ -446,14 +464,16 @@ int main(int argc, char* argv[])
 			tnds.push_back(p);		
 		}
 		
-    cout<<"[Node Count] "<<tnds.size()<<endl;
+        cout<<"[Node Count] "<<tnds.size()<<endl;
 		Triangulation* ttri = Triangulation::makeTriangulation(tnds);
 		ttri->nbRows = r;
 		ttri->nbCols = c;
 		string fn = filename+".rec.pgm";
 		PGM::renderTriangulation(image, r, c, 
 														 fn.c_str(), ttri->getTriangles());
-		
+        string fn_voronoi = filename+"_Voronoi.pgm";
+        PGM::renderTriangulation(image, r, c,
+                                 fn_voronoi.c_str(), ttri->getTriangles());
 		Thinning* tthinning = new Thinning(ttri);
 		tthinning->printEdges(filename+".edge",1);
 		tthinning->printTriangles(filename+".triangle",1);
@@ -541,6 +561,12 @@ int main(int argc, char* argv[])
 													 thinning->triangulation->nbRows, 
 													 thinning->triangulation->nbCols, 
 													 filenameRightAfterThinning.c_str(),dtta);
+
+    string fn_voronoi = filename+"_Voronoi.pgm";
+    PGM::renderTriangulation(image, row, col,
+                             fn_voronoi.c_str(), thinning->triangulation->getTriangles());
+
+
 	char psnr[10];
 	sprintf(psnr,"%f",image.PSNR(image0));
 	string psnr_str = psnr;
