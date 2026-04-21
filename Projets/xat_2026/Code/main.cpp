@@ -554,18 +554,17 @@ int main(int argc, char* argv[])
     thinning->printTriangulationEps(filenameTriangulationEps);
 	thinning->printTriangulationOff(filenameTriangulationOff);
 
-    //TODO (06/04/2026): test avec un renderTriangulation de type Voronoi
-    //
 
-	PGM::renderTriangulation(image,
-													 thinning->triangulation->nbRows, 
-													 thinning->triangulation->nbCols, 
-													 filenameRightAfterThinning.c_str(),dtta);
+    PGM::renderTriangulation(image, thinning->triangulation->nbRows,
+                                    thinning->triangulation->nbCols,
+                                    filenameRightAfterThinning.c_str(),dtta);
 
+    std::cout << "after render Triangulation" << std::endl;
     string fn_voronoi = filename+"_Voronoi.pgm";
-    PGM::renderTriangulation(image, row, col,
+    PGM::renderVoronoi(image, row, col,
                              fn_voronoi.c_str(), thinning->triangulation->getTriangles());
 
+    std::cout << "after render Voronoi" << std::endl;
 
 	char psnr[10];
 	sprintf(psnr,"%f",image.PSNR(image0));

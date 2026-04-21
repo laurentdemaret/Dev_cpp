@@ -247,6 +247,7 @@ void PGM::renderTriangulation(M3Matrix& image,
 	
   for ( unsigned int i = 0; i < dtta.size(); i++) 
   {
+
     //Following lines added for anisotropic diffusion 19/10/2010
         fixed[dtta[i]->v1->x][dtta[i]->v1->y] = true;
         fixed[dtta[i]->v2->x][dtta[i]->v2->y] = true;
@@ -338,14 +339,29 @@ void PGM::renderVoronoi(M3Matrix& image,
         xmax = dtta[i]->xMax();
         ymax = dtta[i]->yMax();
 
+        if(ymax >= NbRows){ ymax = NbRows-1;}
+        if(xmax >= NbCols){ xmax = NbCols-1;}
+
         // det = determinant;
         det = dtta[i]->Det();
+        std::cout << "[voronoi loop] : " << i << std::endl;
+
         // loop on all the points of the triangle
         // ba, bb, bc barycentric coordinates of p
         for (int dx=xmin;dx<=xmax;dx++)
         {
+            if(dx >= NbCols || dx < 0)
+            {
+                std::cout << "dx : " << dx  << std:: endl;
+            }
             for (int dy=ymin;dy<=ymax;dy++)
             {
+                if(dy >= NbRows || dy < 0)
+                {
+                    std::cout << "dy : " << dy  << std:: endl;
+                }
+
+
                 // get L(f,Ty) and epsilon
                 //val = (ba*dtta[i]->v1->f)+(bb*dtta[i]->v2->f)+(bc*dtta[i]->v3->f);
                 val = dtta[i]->getVoronoiCentroid(dx,dy)->f;
