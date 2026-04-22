@@ -1394,8 +1394,6 @@ Triangulation.o: ../../Triangulation.cpp ../../Triangulation.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Triangulation.o ../../Triangulation.cpp
 
 VoronoiCell.o: ../../VoronoiCell.cpp ../../Point2D.h \
-		../../Edge.h \
-		../../Triangle.h \
 		../../VoronoiCell.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o VoronoiCell.o ../../VoronoiCell.cpp
 

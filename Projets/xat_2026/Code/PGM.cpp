@@ -25,35 +25,36 @@ PGM::~PGM()
 PointGrid* PGM::readFile(const char* filename)
 {
 	vector<Point2D*> nodes;
-    int b,h;
+    int cols,rows;
 	ifstream input(filename);
 	//assert(input.is_open());
 	char buf[1000];
  	input.getline(buf, 1000);
  	char buf1[1];
 	input.read(buf1,1);
-	while (*buf1 == '#') {
+    while (*buf1 == '#')
+    {
 		input.getline(buf, 1000);
 		input.read(buf1,1);
 	}
 
 	input.unget();
-	input >> b;
-	input >> h;
+    input >> cols;
+    input >> rows;
 
 	int f;
 	input >> f;
-    for (int i=0;i<b;i++)
+    for (int i=0;i<rows;i++)
     {
-      for (int j=0;j<h;j++)
+      for (int j=0;j<cols;j++)
       {
         input >> f;
-        Point2D* p = Point2D::makePoint2D(j,i,f);
+        Point2D* p = Point2D::makePoint2D(i,j,f);
         nodes.push_back(p);
       }
 	}
   
-	PointGrid* grid = new PointGrid(nodes, h, b);  
+    PointGrid* grid = new PointGrid(nodes, rows, cols);
 	return grid;
 }
 
@@ -230,64 +231,31 @@ void PGM::renderTriangulation(M3Matrix& image,
   double det;
   double ba, bb , bc;
   int xmin, ymin, xmax, ymax;
-
-  //Following lines added for anisotropic diffusion 19/10/2010
-  // init fixed
-  int** fixed = new int*[NbCols];
-  for(int x=0;x<NbCols;++x)
-  {
-    fixed[x] = new int[NbRows];
-    for(int y=0;y<NbRows;++y)
-    {
-      fixed[x][y] = false;
-    }
-  }
-   //end of addition 19/10/2010
-	
-	
+		
   for ( unsigned int i = 0; i < dtta.size(); i++) 
   {
+      std::cout << "[renderTriangulation] triangle : " << i  << std::endl;
+      // Warning : This is true only with integer coordinates
+      xmin = dtta[i]->xMin();
+      ymin = dtta[i]->yMin();
+      xmax = dtta[i]->xMax();
+      ymax = dtta[i]->yMax();
 
-    //Following lines added for anisotropic diffusion 19/10/2010
-        fixed[dtta[i]->v1->x][dtta[i]->v1->y] = true;
-        fixed[dtta[i]->v2->x][dtta[i]->v2->y] = true;
-        fixed[dtta[i]->v3->x][dtta[i]->v3->y] = true;
-        //end of addition 19/10/2010 (corrected 06/04/2026, to be possibly checked)
-		
-    // Warning : This is true only with integer coordinates
-    //17/04/2026 replacement of:
-        /*xmin = dtta[i]->v1->x;
-    ymin = dtta[i]->v1->y;
-    if ( dtta[i]->v2->x < xmin ) xmin = dtta[i]->v2->x;
-    if ( dtta[i]->v3->x < xmin ) xmin = dtta[i]->v3->x;
-    if ( dtta[i]->v2->y < ymin ) ymin = dtta[i]->v2->y;
-    if ( dtta[i]->v3->y < ymin ) ymin = dtta[i]->v3->y;
+      std::cout << "xmin : " << xmin << std::endl;
+      std::cout << "ymin : " << ymin << std::endl;
+      std::cout << "xmax : " << xmax << std::endl;
+      std::cout << "ymax : " << ymax << std::endl;
 
-    xmax = dtta[i]->v1->x;
-    ymax = dtta[i]->v1->y;
-    if ( dtta[i]->v2->x > xmax ) xmax = dtta[i]->v2->x;
-    if ( dtta[i]->v3->x > xmax ) xmax = dtta[i]->v3->x;
-    if ( dtta[i]->v2->y > ymax ) ymax = dtta[i]->v2->y;
-    if ( dtta[i]->v3->y > ymax ) ymax = dtta[i]->v3->y;*/
-    //by:
-    xmin = dtta[i]->xMin();
-    ymin = dtta[i]->yMin();
-    xmax = dtta[i]->xMax();
-    ymax = dtta[i]->yMax();
+      // det = determinant;
+      det = dtta[i]->Det();
 
-    // det = determinant;
-    det = dtta[i]->Det();
-    /*det = (dtta[i]->v1->x*(dtta[i]->v2->y-dtta[i]->v3->y)) +
-            (dtta[i]->v2->x*(dtta[i]->v3->y-dtta[i]->v1->y)) +
-                (dtta[i]->v3->x*(dtta[i]->v1->y-dtta[i]->v2->y)); */
-
-	// loop on all the points of the triangle
-    // ba, bb, bc barycentric coordinates of p
-    for (int dx=xmin;dx<=xmax;dx++)
-    {
+      // loop on all the points of the triangle
+      // ba, bb, bc barycentric coordinates of p
+      for (int dx=xmin;dx<=xmax;dx++)
+      {
         for (int dy=ymin;dy<=ymax;dy++)
         {
-            ba = (dx*(dtta[i]->v2->y-dtta[i]->v3->y) + dtta[i]->v2->x*(dtta[i]->v3->y-dy) + dtta[i]->v3->x*(dy-dtta[i]->v2->y))/det;
+            ba = (dx*(dtta[i]->v2->y - dtta[i]->v3->y) + dtta[i]->v2->x*(dtta[i]->v3->y-dy) + dtta[i]->v3->x*(dy-dtta[i]->v2->y))/det;
             if(ba<0) continue; //point is outside the triangle
             bb = (dtta[i]->v1->x*(dy-dtta[i]->v3->y) + dx*(dtta[i]->v3->y-dtta[i]->v1->y) + dtta[i]->v3->x*(dtta[i]->v1->y-dy))/det;
             if(bb<0) continue; //point is outside the triangle
@@ -299,7 +267,8 @@ void PGM::renderTriangulation(M3Matrix& image,
 			if (val>255.) val=255.;
 			// WARNING : to be tested on non square images
 			// to check that NbRows and NbCols are not inverted
-			image[dy][dx] = DBL_ROUND(val+0.5);
+            image[dx][dy] = DBL_ROUND(val+0.5);
+            //image[dy][dx] = DBL_ROUND(val+0.5);
 		}
     }
   }
@@ -308,7 +277,7 @@ void PGM::renderTriangulation(M3Matrix& image,
 	//anisotropicDiffusion(image,fixed,NbRows,NbCols,1);
 	//end of addition 19/10/2010
 
-	
+  std::cout << "[renderTriangulation : just before dtta.clear()]"<< std::endl;
   dtta.clear();
   ofstream out(outputFilename);
   image.SavePGM(out);

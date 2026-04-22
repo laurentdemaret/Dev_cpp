@@ -176,9 +176,22 @@ void test_Triangulations()
 
     //Load an image
     M3Matrix OriginalImage;
-    //std::string OriginalImageName("Original/church_gray_ascii.pgm");
-    std::string OriginalImageName("Data/lena128.pgm");
+    std::string OriginalImageName("Original/church_gray_ascii.pgm");
+    //std::string OriginalImageName("Data/lena128.pgm");
     OriginalImage.LoadFromPGM(OriginalImageName);
+
+    std::cout << "OriginalImage.GetNbRows():" <<  OriginalImage.GetNbRows() << " OriginalImage.GetNbCols():" << OriginalImage.GetNbCols() <<  std::endl;
+    std::string SaveName("image_test_a.pgm");
+    ofstream outStream_Save(SaveName);
+
+    OriginalImage.Reshape(3,4);
+    OriginalImage.SetValues(0.0);
+
+    OriginalImage[0][3]=255;
+
+    OriginalImage.SavePGM(outStream_Save);
+
+    exit(-1);
 
     M3Matrix TestImage;
     std::string TestImageName("Out/test.pgm");
@@ -240,7 +253,6 @@ void test_Triangulations()
 
     }
 
-    exit(-1);
 
     for(int i = 0;i<triangles.size();i++)
     {
@@ -387,7 +399,6 @@ void test()
     double x = 3.5;
 
     double y = my_function_2D(x);
-
     cout << "x : " << x << endl;
     cout << "y : x^2 " << y << endl;
 }
@@ -398,7 +409,7 @@ int main(int argc, char* argv[])
 {
     //test();
     //test_Pointers();
-    //exit(-1);
+    //test_Triangulations();
 
 	int at_alg, iterations, exchange_iterations,exchange_radius,quantization, compressing_options;
 	int filenames_num;
@@ -484,17 +495,23 @@ int main(int argc, char* argv[])
 	start  = clock();
 	start0 = clock();
 	PointGrid* grid = PGM::readFile(filenames[0]);
+
 	cout<<"[read] "<<(clock()-start)<<endl;
 	start  = clock();
 	Triangulation* tri = new Triangulation(grid);
 	cout<<"[triangulation] "<<(clock()-start)<<endl;
-	
-  //This is the thinning algorithm
+
+    std::cout <<   " tri->nbRows :" << tri->nbRows   << "  tri->nbCols : "  << tri->nbCols << std::endl;
+    // *************************
+    //* repousser cette borne
+    // *************************
+
+    //This is the thinning algorithm
 	start  = clock();
 	Thinning* thinning = new Thinning(tri);
   //thinning->lambda = 200.0; //TODO: this should be a parameter !!!!
 	thinning->lambda = 0.0; //TODO: this should be a parameter !!!!
-	
+
 	switch (at_alg) 
 	{
         //TODO: implement an algorithm with Voronoi cells
@@ -512,26 +529,27 @@ int main(int argc, char* argv[])
 			thinning->fastThinning(iterations);		
 			break;
 	}
-	
-	cout<<"[Thinning] "<<(clock()-start)<<endl;
-	
+
+    cout<<"[Thinning] "<<(clock()-start)<<endl;
+
 	// original image 
 	M3Matrix image0, optImage;
-	image0.Reshape(thinning->triangulation->nbCols, thinning->triangulation->nbRows);
+    //image0.Reshape(thinning->triangulation->nbCols, thinning->triangulation->nbRows);
 	optImage.Reshape(thinning->triangulation->nbRows, thinning->triangulation->nbCols );
-	
+
 	vector<Triangle*> dtta = thinning->triangulation->getTriangles();
 	vector<Point2D*> nodes = thinning->triangulation->getNodes();
-	
+
 	int row, col;
 	for (unsigned int n = 0; n < thinning->triangulation->nodes.size(); n++) 
 	{
-	  col = thinning->triangulation->nodes[n]->x;
-	  row = thinning->triangulation->nodes[n]->y;
-	  optImage[col][row] = thinning->triangulation->nodes[n]->f;
-	  image0[row][col] = thinning->triangulation->nodes[n]->f;
+      row = thinning->triangulation->nodes[n]->x;
+      col = thinning->triangulation->nodes[n]->y;
+      optImage[row][col] = thinning->triangulation->nodes[n]->f;
+
+      //image0[row][col] = thinning->triangulation->nodes[n]->f;
 	}
-	
+
 	ostringstream oss_temp;
 	oss_temp << "_AT" << at_alg << "_I";
 	if (iterations==-1) oss_temp << "default";
@@ -554,10 +572,12 @@ int main(int argc, char* argv[])
     thinning->printTriangulationEps(filenameTriangulationEps);
 	thinning->printTriangulationOff(filenameTriangulationOff);
 
+    std::cout << "[print Triangulation functionalities done]" << std::endl;
 
     PGM::renderTriangulation(image, thinning->triangulation->nbRows,
                                     thinning->triangulation->nbCols,
                                     filenameRightAfterThinning.c_str(),dtta);
+    exit(-1);
 
     std::cout << "after render Triangulation" << std::endl;
     string fn_voronoi = filename+"_Voronoi.pgm";

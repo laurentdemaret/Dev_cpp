@@ -1109,6 +1109,7 @@ vector<Edge*> Triangulation::deletePoint(Point2D* point)
 											this->xMin,
 											this->yMax,
 											this->yMin);
+
     // remove point from cell
 	vector<Edge*> newEdges;
 	this->removePoint(point, &cell);

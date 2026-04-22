@@ -413,20 +413,33 @@ ph_min->x<<","<<ph_min->y<<" -> "<<ph_min->epsilon<<": "<<endl;
 
 void Thinning::thinningAT5(unsigned int tcount)
 {
-	/* build point heap */
+    // Initialisation : build point heap
 	for (unsigned int i = 0; i < this->triangulation->nodes.size(); i++) 
 	{
 		this->calculateSignificanceForHeap(this->triangulation->nodes[i]);
 	}
-	for(unsigned int n = 0; n < tcount; n++) 
+    std::cout << "[thinningAT5]: initialisation done" << std::endl;
+
+    // Iteration : build point heap
+    for(unsigned int n = 0; n < tcount; n++)
 	{
-		/* get less significant node from point heap */
+        cout<<"[deleting point] "<<n<<"/"<<tcount<<endl;
+        // get less significant node from point heap
 		Point2D* ph_min = (Point2D*)fh_extractmin(this->nodeHeap);
+        cout<<"[fh_extractmin done] "<<endl;
+
 		ph_min->fh_el = NULL;
 		vector<Point2D*> neighbors = ph_min->getNeighbors();
-		/* delete point */
+        cout<<"[getNeighbors done] "<<endl;
+
+        std::cout << "this->triangulation->xMax : " << this->triangulation->xMax << endl;
+        std::cout << "this->triangulation->yMax : " << this->triangulation->yMax << endl;
+
+        // delete point
 		this->triangulation->deletePoint(ph_min);
-		/* recalculate significance of neighbors */
+        cout<<"[deletePoint done] "<<endl;
+
+        // recalculate significance of neighbors
 		for(unsigned int i = 0; i < neighbors.size(); i++)
 		{
 		  if(neighbors[i]->gridBound) continue;
@@ -435,8 +448,8 @@ void Thinning::thinningAT5(unsigned int tcount)
 		  this->calculateSignificanceForHeap(neighbors[i]);
 		}
 /* ********************** DEBUG ***************************** */		
-//cout<<"[deleting point] "<<n<<"/"<<tcount<<"  : "<<
-//ph_min->x<<","<<ph_min->y<<" -> "<<ph_min->epsilon<<endl;
+cout<<"[deleting point] "<<n<<"/"<<tcount<<"  : "<<
+ph_min->x<<","<<ph_min->y<<" -> "<<ph_min->epsilon<<endl;
 /* ********************** DEBUG ***************************** */
 	}
 	
@@ -576,10 +589,10 @@ void Thinning::updateHeaps(vector<Point2D*> neighbors,
 							Edge* edge)
 {
 	
-	/* remove old edges from edge heap */
-	for (unsigned int j = 0; j < neighbors.size(); j++) {
-
-		if(neighbors[j]->gridBound) continue;
+    // remove old edges from edge heap
+    for (unsigned int j = 0; j < neighbors.size(); j++)
+    {
+      if(neighbors[j]->gridBound) continue;
 		fh_delete(this->nodeHeap, (fibheap_el*)(neighbors[j]->fh_el)); 
 		neighbors[j]->fh_el=NULL;
 		vector<Edge*> nEdges = neighbors[j]->getEdges();
@@ -607,14 +620,16 @@ void Thinning::updateHeaps(vector<Point2D*> neighbors,
 	}
 	
 	vector<Edge*> dirtryEdges;
-	for (unsigned int j = 0; j < neighbors.size(); j++) {
+    for (unsigned int j = 0; j < neighbors.size(); j++)
+    {
 		if(neighbors[j]->gridBound) continue;
 		this->calculateSignificanceForHeap(neighbors[j]);
 	}
 	
 	
-	/* this is necessary to avoid conflicts on dirty flags of edges */
-	for (unsigned int j = 0; j < neighbors.size(); j++) {
+    // this is necessary to avoid conflicts on dirty flags of edges
+    for (unsigned int j = 0; j < neighbors.size(); j++)
+    {
 		vector<Edge*> nEdges = neighbors[j]->getEdges();
 		for (unsigned int i= 0; i < nEdges.size(); i++) {
 			if(find(dirtryEdges.begin(), dirtryEdges.end(), nEdges[i]) == dirtryEdges.end() ){
@@ -644,7 +659,8 @@ void Thinning::calculateSignificanceForHeap(Point2D* point)
 
 void Thinning::calculateSignificanceForHeap_ForAT8(Point2D* point)
 {
-	if(!point->gridBound){
+    if(!point->gridBound)
+    {
 		/* calculate significance the this node */
 		//point->epsilon = this->calculatePointSignificance(point);
 		/*if((int)(point->x)%3 ==0 && (int)(point->y)%3 ==0)
@@ -661,17 +677,18 @@ void Thinning::calculateSignificanceForHeap_ForAT8(Point2D* point)
 
 void Thinning::calculateSignificanceForEdgeHeap(Edge* edge)
 {
-	if(!edge->org->gridBound && !edge->dest->gridBound){
-		/* calculate significance the this node */
+    if(!edge->org->gridBound && !edge->dest->gridBound)
+    {
+        // calculate significance the this node
 		edge->epsilon = this->calculateEdgeSignificance(edge);
-	    /* insert node into the fib heap and store pointer to the heap element */
+        // insert node into the fib heap and store pointer to the heap element
 	    edge->fh_el = (void*)fh_insert( this->edgeHeap, (void*)(edge) );
 	}
 }
 
 int Thinning::exchange(unsigned int exchange_iterations)
 {
-	/* build thinned neighbor heap */
+    // build thinned neighbor heap
 	for (unsigned int i = 0; i < this->triangulation->nodes.size(); i++) 
 	{
 		if(!this->triangulation->nodes[i]->thinned
@@ -687,7 +704,8 @@ int Thinning::exchange(unsigned int exchange_iterations)
 		if(fh_min(this->thinnedNeighborHeap) == NULL) break;
 		Point2D* point = (Point2D*)fh_extractmin(this->thinnedNeighborHeap);
 		point->exchange_fh_el = NULL;
-		if(point->dirty){
+        if(point->dirty)
+        {
 			calculatePairSignificance(point);
 			continue;
 		}
@@ -697,7 +715,7 @@ int Thinning::exchange(unsigned int exchange_iterations)
 		if(point->thinned
 		|| bestNeighbor == NULL
 		|| !bestNeighbor->thinned ) continue;
-		/* exchange */
+        // exchange
 		xcount++;
 		
 		set<Point2D*> neighbors;
@@ -769,7 +787,7 @@ if(abs((int)(nDiff-diff)) > 1)
 	}
 }
 
-		/* refactor triangle objects */
+        // refactor triangle objects
 		Triangle::deleteTriangles(triangles);
 	}		
 		
@@ -780,7 +798,7 @@ if(abs((int)(nDiff-diff)) > 1)
 
 void Thinning::calculatePairSignificance(Point2D* point)
 {
-	/* reset point neighbor attributes */
+    // reset point neighbor attributes
 	point->bestNeighbor = NULL;
 	point->bestNeighborDiff = 0;
 
@@ -791,7 +809,7 @@ void Thinning::calculatePairSignificance(Point2D* point)
 	if(point->gridBound) return;
 
 	point->dirty = false;
-	/* get the next neighbors */
+    // get the next neighbors
 	vector<Point2D*> neighbors;
 	vector<Triangle*> triangles = this->deletePointWithSigRecalc(point);
 	
@@ -800,20 +818,25 @@ void Thinning::calculatePairSignificance(Point2D* point)
 	int startY = max(0,point->y-Thinning::exchangeRadius);
 	int endY = min(this->triangulation->yMax,point->y+Thinning::exchangeRadius);
 	for (int i = startX; i <= endX; i++) {
-		int xOffset = i*this->triangulation->nbRows;
-		for (int j = startY; j <= endY; j++) {
+        //int xOffset = i*this->triangulation->nbRows;
+        int xOffset = i*this->triangulation->nbCols;
+        for (int j = startY; j <= endY; j++)
+        {
 			Point2D* np = this->triangulation->nodes[xOffset+j];
 			if(np->thinned && np != point){
 				bool inside = false;
 				// collect only thinned nodes inside fo cell hull 
-				for (unsigned int k = 0; k < triangles.size(); ++k) {
-					if( triangles[k]->insideTriangle(np->x, np->y) ){
+                for (unsigned int k = 0; k < triangles.size(); ++k)
+                {
+                    if( triangles[k]->insideTriangle(np->x, np->y) )
+                    {
 						np->thinnedTriangle = triangles[k];
 						inside = true;
 						break;
 					}
 				}
-				if(inside){
+                if(inside)
+                {
 					neighbors.push_back(np);
 				}
 			}
@@ -830,7 +853,7 @@ void Thinning::calculatePairSignificance(Point2D* point)
 		if( neighbors[i]->gridBound || neighbors[i]->exchanged ) continue;
 		this->triangulation->insertPoint(neighbors[i]);
 		vector<Triangle*> tt = this->deletePointWithSigRecalc(neighbors[i]);
-		/* free triangle objects */
+        // free triangle objects
 		Triangle::deleteTriangles(tt);
 		
 		double eps2 = neighbors[i]->epsilon;
@@ -1005,18 +1028,18 @@ void Thinning::printTriangulationOff(const string& filename)
   M3Matrix Indices(this->triangulation->nbRows,this->triangulation->nbCols);
 	
   //Write the nodes : coordinates and value
-	for (unsigned int i=0; i<nodes.size(); i++) 
-	{
-		out << nodes[i]->x << " ";
-		out << nodes[i]->y << " ";
-		out << nodes[i]->f << " ";
-		out << endl;
+  for (unsigned int i=0; i<nodes.size(); i++)
+  {
+    out << nodes[i]->x << " ";
+    out << nodes[i]->y << " ";
+    out << nodes[i]->f << " ";
+    out << endl;
 		
-		Indices[int(nodes[i]->x)][int(nodes[i]->y)] = i;
-	}
+    Indices[int(nodes[i]->x)][int(nodes[i]->y)] = i;
+  }
 	
-	//Write the nodes : coordinates and value
-	for (unsigned int i=0; i<triangles.size(); i++) 
+  //Write the nodes : coordinates and value
+  for (unsigned int i=0; i<triangles.size(); i++)
 	{
     out << "3 ";
         int x1 = (int)triangles[i]->v1->x;
@@ -1044,16 +1067,16 @@ void Thinning::printTriangulationEps(const string& filename)
   //assert(out.is_open());
   
   out << "%!PS-Adobe-3.0 EPSF-3.0" << endl;
-	out << "%%BoundingBox: " << 0 << " " << 0 << " " << this->triangulation->nbRows*2  << " "<< this->triangulation->nbCols*2  << endl;
+  out << "%%BoundingBox: " << 0 << " " << 0 << " "<< this->triangulation->nbCols*2 << " " << this->triangulation->nbRows*2 << endl;
 
-  out << "0.01 setlinewidth" << endl;
+  out << "0.1 setlinewidth" << endl;
   out << "0 0 0 setrgbcolor" << endl;
-  //int nbrows = this->triangulation->nbRows;
+  int nbrows = this->triangulation->nbRows;
   int nbcols = this->triangulation->nbCols;
-	
-  for (unsigned int i=0; i<edges.size(); i++) 
+
+  for (unsigned int i=0; i<edges.size(); i++)
   {	  
-  	double edge_AD = fabs((double)(edges[i]->org->f - edges[i]->dest->f));
+    /*double edge_AD = fabs((double)(edges[i]->org->f - edges[i]->dest->f));
     if(edge_AD>40.)
     {
       out << "1 0 0 setrgbcolor" << endl;
@@ -1068,16 +1091,16 @@ void Thinning::printTriangulationEps(const string& filename)
       {
         out << "0 0 0 setrgbcolor" << endl;
       }
-    }
-    
-    out << (edges[i]->org->x)*2 +1<< " ";
-    out << (nbcols-edges[i]->org->y-1)*2 +1 << " ";
+    }*/
+
+      out << (edges[i]->org->y)*2 +1 << " ";
+    out << (nbrows-1-edges[i]->org->x)*2 +1<< " ";
 	  
-	  out << " moveto ";
-	  out << (edges[i]->dest->x)*2 +1<< " ";
-	  out << (nbcols-edges[i]->dest->y-1)*2 +1 << " ";
+    out << " moveto ";
+    out << (edges[i]->dest->y)*2 +1 << " ";
+    out << (nbrows-1-edges[i]->dest->x)*2 +1<< " ";
     out << " lineto stroke";
-	  out << endl;
+    out << endl;
   }
 
   out.close();

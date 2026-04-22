@@ -64,11 +64,13 @@ void Point2D::deletePoint2D()
 	this->thinnedTriangle = NULL;
 	this->bestNeighborDiff = 0.;
 	this->epsilon = 0.;
-	if(this->clone != NULL){
+    if(this->clone != NULL)
+    {
 		this->clone->clone = NULL;
 		this->clone = NULL;
 	}
-    if(this->VoronoiCentroid != NULL){
+    if(this->VoronoiCentroid != NULL)
+    {
         this->VoronoiCentroid = NULL;
     }
 
@@ -269,8 +271,8 @@ int Point2D::inCircle(Point2D* point1, Point2D* point2, Point2D* point3)
 
 }
 
-bool Point2D::ccw(Point2D* point1, Point2D* point2){
-	
+bool Point2D::ccw(Point2D* point1, Point2D* point2)
+{
 	int ax = this->x;
 	int ay = this->y;
 	int bx = point1->x;
@@ -280,13 +282,16 @@ bool Point2D::ccw(Point2D* point1, Point2D* point2){
 	return ( (bx-ax)*(cy-ay) + (ax-cx)*(by-ay) ) > 0;
 }
 
-/* check if ab has score > cd */
-bool Point2D::checkScore(Point2D* b, Point2D* c, Point2D* d){
 
-	if( this->lessThan(b) ){
+// check if ab has score > cd
+bool Point2D::checkScore(Point2D* b, Point2D* c, Point2D* d)
+{
+    if( this->lessThan(b) )
+    {
 		return ( this->lessThan(c) && this->lessThan(d) );
 	}
-	else{
+    else
+    {
 		return ( b->lessThan(c) && b->lessThan(d) );
 	}
 
@@ -334,7 +339,8 @@ vector<Edge*> Point2D::getCellHull(int xMax, int xMin, int yMax, int yMin)
 	vector<Edge*> cell;
 	Edge* entry = this->entry;
 	Edge* edge = entry->getNext(entry->getOtherPoint(this)); 
-	if(entry->isConvexHull(xMax,xMin,yMax,yMin)){
+    if(entry->isConvexHull(xMax,xMin,yMax,yMin))
+    {
 		cell.push_back(entry);
 		if(edge->checkTriangle(this)){
 			cell.push_back(edge);
@@ -346,7 +352,8 @@ vector<Edge*> Point2D::getCellHull(int xMax, int xMin, int yMax, int yMin)
 	Edge* orbit = entry->getNext(this);
 	while ( entry != orbit ){
 		edge = orbit->getNext(orbit->getOtherPoint(this));
-		if(orbit->isConvexHull(xMax,xMin,yMax,yMin)){
+        if(orbit->isConvexHull(xMax,xMin,yMax,yMin))
+        {
 			cell.push_back(orbit);
 			if(edge->checkTriangle(this)){
 				cell.push_back(edge);
@@ -368,10 +375,12 @@ bool Point2D::isConvexHull(Point2D* b, int xMax, int xMin, int yMax, int yMin)
 		if( this == b ){
 			return this->convexHull;
 		}
-		if( this->y == b->y ){
+        if( this->y == b->y )
+        {
 			return this->y == yMin || this->y == yMax;
 		}
-		if( this->x == b->x ){
+        if( this->x == b->x )
+        {
 			return this->x == xMin || this->x == xMax;
 		}
 		return false;

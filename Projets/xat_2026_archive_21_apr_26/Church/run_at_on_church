@@ -1,0 +1,4 @@
+#!/bin/bash
+
+../xat -q8 -at6 -i65000 -s5000 -r3 church_gray_256_ASCII.pgm
+../xat -q8 -at6 -i65200 -s5000 -r3 church_gray_256_ASCII.pgm

@@ -7,8 +7,7 @@ CONFIG += sdk_no_version_check
 message(Le chemin du projet basic est: $$_PRO_FILE_PWD_)
 
 # Nom de l'éxécutable (binaire)
-
-# TARGET = basic
+TARGET = basic
 # TARGET=~/bin/test2024_minimal
 
 # Définir le chemin de destination

@@ -1,0 +1,6 @@
+#!/bin/zsh
+cd Code
+pwd
+rm -f xat
+make
+mv xat ..
