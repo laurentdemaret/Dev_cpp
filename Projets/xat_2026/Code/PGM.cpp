@@ -255,11 +255,14 @@ void PGM::renderTriangulation(M3Matrix& image,
       {
         for (int dy=ymin;dy<=ymax;dy++)
         {
-            ba = (dx*(dtta[i]->v2->y - dtta[i]->v3->y) + dtta[i]->v2->x*(dtta[i]->v3->y-dy) + dtta[i]->v3->x*(dy-dtta[i]->v2->y))/det;
+            ba = dtta[i]->Barycentric1(dx,dy);
+            //ba = (dx*(dtta[i]->v2->y - dtta[i]->v3->y) + dtta[i]->v2->x*(dtta[i]->v3->y-dy) + dtta[i]->v3->x*(dy-dtta[i]->v2->y))/det;
             if(ba<0) continue; //point is outside the triangle
-            bb = (dtta[i]->v1->x*(dy-dtta[i]->v3->y) + dx*(dtta[i]->v3->y-dtta[i]->v1->y) + dtta[i]->v3->x*(dtta[i]->v1->y-dy))/det;
+            bb = dtta[i]->Barycentric2(dx,dy);
+            //bb = (dtta[i]->v1->x*(dy-dtta[i]->v3->y) + dx*(dtta[i]->v3->y-dtta[i]->v1->y) + dtta[i]->v3->x*(dtta[i]->v1->y-dy))/det;
             if(bb<0) continue; //point is outside the triangle
-            bc = (dtta[i]->v1->x*(dtta[i]->v2->y-dy) + dtta[i]->v2->x*(dy-dtta[i]->v1->y) + dx*(dtta[i]->v1->y-dtta[i]->v2->y))/det;
+            bc = dtta[i]->Barycentric3(dx,dy);
+            //bc = (dtta[i]->v1->x*(dtta[i]->v2->y-dy) + dtta[i]->v2->x*(dy-dtta[i]->v1->y) + dx*(dtta[i]->v1->y-dtta[i]->v2->y))/det;
             if(bc<0) continue; //point is outside the triangle
 			// get L(f,Ty) and epsilon
             val = (ba*dtta[i]->v1->f)+(bb*dtta[i]->v2->f)+(bc*dtta[i]->v3->f);

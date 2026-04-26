@@ -62,6 +62,10 @@ public:
     int xMax();
     int yMax();
 
+    double Barycentric1(double x, double y);
+    double Barycentric2(double x, double y);
+    double Barycentric3(double x, double y);
+
 
 
 private:	

@@ -23,14 +23,14 @@
 
 using namespace std;
 
-// **********************************************
+// **************************************************************************************
 // * Liste von Todos (Stand: 20.04.26)
 // 1 - Check rows and cols
 // 2 - Vereinfachung der I/O Funktionalitäten
 // 3 - Print (in eps Format) die Voronoi-Zellen
 // 4 - Liste der Voronoi Zelle Pixeln -> direkt in die Klasse rein (aktuell noch nicht)
 // 5 - Berechnung des Aktualisierungsfehlers ()
-// **********************************************
+// ****************************************************************************************
 
 
 class TestTriangle;

@@ -163,7 +163,8 @@ double Thinning::calculateSignificance(vector<Triangle*> oTriangles,
 		//TODO max = -1: komisch, dass die sig besser ist, wenn man alle
 		//TODO points beruecksichtigt, auch die die nicht zur alten cell gehören...
 		max = -1.;
-		for (unsigned int j = 0; j < oTriangles.size(); j++) {
+        for (unsigned int j = 0; j < oTriangles.size(); j++)
+        {
 			double err = calculateError(oTriangles[j], attachedPoints[i]);
 			if (max < err) {
 				max = err;
@@ -211,8 +212,8 @@ double Thinning::calculateError(Triangle* triangle, Point2D* point)
 	int cx = c->x;
 	int cy = c->y;
 	
-	int ba = (x*(by-cy) + bx*(cy-y) + cx*(y-by));
-	if(ba<0) return -1;
+    int ba = (x*(by-cy) + bx*(cy-y) + cx*(y-by));
+    if(ba<0) return -1;
 	
 	int bb = (ax*(y-cy) + x*(cy-ay) + cx*(ay-y));
 	if(bb<0) return -1;

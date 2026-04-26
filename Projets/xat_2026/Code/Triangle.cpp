@@ -145,6 +145,34 @@ double Triangle::Det()
     return det;
 }
 
+
+double Triangle::Barycentric1(double x, double y)
+{
+    double ba;
+    ba = (x-v2->x)*(y-v3->y) - (y-v2->y)*(x-v3->x);
+
+    return ba;
+}
+
+
+double Triangle::Barycentric2(double x, double y)
+{
+    double bb;
+    bb = (x-v3->x)*(y-v1->y) - (y-v3->y)*(x-v1->x);
+
+    return bb;
+}
+
+double Triangle::Barycentric3(double x, double y)
+{
+    double bc = 0.;
+    bc = (x-v1->x)*(y-v2->y) - (y-v1->y)*(x-v2->x);
+
+    return bc;
+}
+
+
+
 // check if thispoint inside or on one edge
 // of the triangle builded by the 3 points
 // parameters: point1, point2, point3
