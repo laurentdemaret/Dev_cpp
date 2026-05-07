@@ -23,14 +23,15 @@
 
 using namespace std;
 
-// **************************************************************************************
+// **********************************************************************************************
 // * Liste von Todos (Stand: 20.04.26)
-// 1 - Check rows and cols
-// 2 - Vereinfachung der I/O Funktionalitäten
-// 3 - Print (in eps Format) die Voronoi-Zellen
-// 4 - Liste der Voronoi Zelle Pixeln -> direkt in die Klasse rein (aktuell noch nicht)
-// 5 - Berechnung des Aktualisierungsfehlers ()
-// ****************************************************************************************
+// 1 - Check rows and cols - erledigt: 27.40.26
+// 2 - Wo double Thinning::calculateError_Voronoi(Triangle* triangle, Point2D* point) einsetzen
+// 3 - Berechnung des Aktualisierungsfehlers ()
+// 4 - Liste der Voronoi Zelle Pixeln -> direkt in welche Klasse rein (aktuell noch nicht)
+// 5 - Vereinfachung der I/O Funktionalitäten - präziser angeben
+// 6 - Print (in eps Format) die Voronoi-Zellen
+// **********************************************************************************************
 
 
 class TestTriangle;
@@ -55,7 +56,6 @@ public:
     double y=0.;
 
     vector<TestTriangle*> neighbour_triangles;
-
 };
 
 
@@ -413,7 +413,7 @@ int main(int argc, char* argv[])
 
 	int at_alg, iterations, exchange_iterations,exchange_radius,quantization, compressing_options;
 	int filenames_num;
-	M3Matrix image;
+    M3Matrix image, image_voronoi;
 	char* action_key;
 
     std::cout << "Version portable de at (20/04/2026)" << std::endl;
@@ -483,7 +483,7 @@ int main(int argc, char* argv[])
 		PGM::renderTriangulation(image, r, c, 
 														 fn.c_str(), ttri->getTriangles());
         string fn_voronoi = filename+"_Voronoi.pgm";
-        PGM::renderTriangulation(image, r, c,
+        PGM::renderTriangulation(image_voronoi, r, c,
                                  fn_voronoi.c_str(), ttri->getTriangles());
 		Thinning* tthinning = new Thinning(ttri);
 		tthinning->printEdges(filename+".edge",1);
@@ -515,7 +515,9 @@ int main(int argc, char* argv[])
 	switch (at_alg) 
 	{
         //TODO: implement an algorithm with Voronoi cells
-
+        case 9:
+            thinning->thinningAT9(iterations);
+            break;
         case 5:
 			thinning->thinningAT5(iterations);		
 			break;
@@ -546,7 +548,6 @@ int main(int argc, char* argv[])
       row = thinning->triangulation->nodes[n]->x;
       col = thinning->triangulation->nodes[n]->y;
       optImage[row][col] = thinning->triangulation->nodes[n]->f;
-
       //image0[row][col] = thinning->triangulation->nodes[n]->f;
 	}
 
@@ -577,14 +578,14 @@ int main(int argc, char* argv[])
     PGM::renderTriangulation(image, thinning->triangulation->nbRows,
                                     thinning->triangulation->nbCols,
                                     filenameRightAfterThinning.c_str(),dtta);
-    exit(-1);
 
     std::cout << "after render Triangulation" << std::endl;
     string fn_voronoi = filename+"_Voronoi.pgm";
-    PGM::renderVoronoi(image, row, col,
+    PGM::renderVoronoi( image_voronoi, row, col,
                              fn_voronoi.c_str(), thinning->triangulation->getTriangles());
 
     std::cout << "after render Voronoi" << std::endl;
+    exit(-1);
 
 	char psnr[10];
 	sprintf(psnr,"%f",image.PSNR(image0));

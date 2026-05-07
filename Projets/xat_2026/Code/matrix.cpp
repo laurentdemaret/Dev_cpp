@@ -639,6 +639,9 @@ void M3Matrix::ExchangeRows(int i1, int i2)
 }
 
 
+
+
+
 // Fills up the matrix with the luminance values
 // read in a PGM file
 void M3Matrix::LoadFromPGM(const char* infile)
@@ -654,7 +657,6 @@ void M3Matrix::LoadFromPGM(const char* infile)
   pFile->seekg(0);
   char Buffer;
 	
-  //int row = 0;
 	
 	//Added : 07 april 2010
 	pFile->get(Buffer); //First character
@@ -715,15 +717,19 @@ void M3Matrix::LoadFromPGM(const char* infile)
   *pFile >> NbCols;
   *pFile >> dum;
 	
-	if(dum != 255)
-	{
-	  cout << "warning ! dynamic is not 256 !!!" << endl;
-	}
+  if(dum != 255)
+  {
+    cout << "warning ! dynamic is not 256 !!!" << endl;
+  }
 	
   (*this).Reshape(NbCols,NbRows);
-	for(int j=0;j<t_NbRows;j++)
-    for(int i=0;i<t_NbCols;i++)
-      *pFile >> Data[j][i];
+  for(int j=0;j<t_NbRows;j++)
+    {
+      for(int i=0;i<t_NbCols;i++)
+        {
+          *pFile >> Data[j][i];
+       }
+    }
 
   delete pFile;
 }

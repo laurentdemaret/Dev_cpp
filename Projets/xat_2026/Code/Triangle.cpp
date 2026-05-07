@@ -343,37 +343,6 @@ Point2D* Triangle::getVoronoiCentroid(int px, int py)
 Point2D* Triangle::getVoronoiCentroid(Point2D* p)
 {
     return getVoronoiCentroid(p->x,p->y);
-    /*double d1, d2, d3, d;
-
-    int indx_nn = 1;
-    d1 = ((*this).v1->x -p->x)*((*this).v1->x -p->x) + ((*this).v1->y -p->y)*((*this).v1->y -p->y);
-    d2 = ((*this).v2->x -p->x)*((*this).v2->x -p->x) + ((*this).v2->y -p->y)*((*this).v2->y -p->y);
-    d3 = ((*this).v3->x -p->x)*((*this).v3->x -p->x) + ((*this).v3->y -p->y)*((*this).v3->y -p->y);
-    d=d1;
-    if(d2<d)
-    {
-        d=d2;
-        indx_nn = 2;
-    }
-
-    if(d3<d)
-    {
-        d=d3;
-        indx_nn = 3;
-    }
-
-    if(indx_nn == 1)
-    {
-        return this->v1;
-    }
-    if(indx_nn == 2)
-    {
-        return this->v2;
-    }
-    if(indx_nn == 3)
-    {
-        return this->v3;
-    }*/
 }
 
 Triangle* Triangle::getNeighbourByEdge(Edge *edge)

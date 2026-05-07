@@ -123,7 +123,8 @@ Point2D* Point2D::clonePoint2D()
 vector<Point2D*> Point2D::clonePoint2D(vector<Point2D*> arr)
 {
 	vector<Point2D*> ret;
-	for (unsigned int i = 0; i < arr.size(); i++) {
+    for (unsigned int i = 0; i < arr.size(); i++)
+    {
 		Point2D* c = arr[i]->clonePoint2D();
 		ret.push_back(c);
 	}

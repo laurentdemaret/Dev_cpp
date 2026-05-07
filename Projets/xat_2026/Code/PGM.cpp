@@ -311,8 +311,8 @@ void PGM::renderVoronoi(M3Matrix& image,
         xmax = dtta[i]->xMax();
         ymax = dtta[i]->yMax();
 
-        if(ymax >= NbRows){ ymax = NbRows-1;}
-        if(xmax >= NbCols){ xmax = NbCols-1;}
+        if(xmax >= NbRows){ xmax = NbRows-1;}
+        if(ymax >= NbCols){ ymax = NbCols-1;}
 
         // det = determinant;
         det = dtta[i]->Det();
@@ -322,13 +322,13 @@ void PGM::renderVoronoi(M3Matrix& image,
         // ba, bb, bc barycentric coordinates of p
         for (int dx=xmin;dx<=xmax;dx++)
         {
-            if(dx >= NbCols || dx < 0)
+            if(dx >= NbRows || dx < 0)
             {
                 std::cout << "dx : " << dx  << std:: endl;
             }
             for (int dy=ymin;dy<=ymax;dy++)
             {
-                if(dy >= NbRows || dy < 0)
+                if(dy >= NbCols || dy < 0)
                 {
                     std::cout << "dy : " << dy  << std:: endl;
                 }
@@ -342,7 +342,7 @@ void PGM::renderVoronoi(M3Matrix& image,
                 if (val>255.) val=255.;
                 // WARNING : to be tested on non square images
                 // to check that NbRows and NbCols are not inverted
-                image[dy][dx] = DBL_ROUND(val+0.5);
+                image[dx][dy] = DBL_ROUND(val+0.5);
             }
         }
     }

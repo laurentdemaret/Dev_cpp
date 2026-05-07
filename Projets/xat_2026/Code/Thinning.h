@@ -26,7 +26,8 @@ public:
 	//Matrix with the current approximated greyvalues 
 	M3Matrix ApproximatedImage;
 
-	// methods 
+    // methods
+    void thinningAT9(unsigned int tcount);
 	void thinningAT5(unsigned int);
 	void thinningAT6(unsigned int);
 	void thinningAT8(unsigned int);
@@ -46,10 +47,17 @@ private:
 	fibheap* edgeHeap;
 	fibheap* thinnedNeighborHeap;
 	
-	// methods 
+    // methods
+    double calculateErrorVoronoi(Triangle* triangle, Point2D* point);
+
+    double calculatePointSignificanceVoronoi(Point2D* point);
 	double calculatePointSignificance(Point2D*);
 	double calculatePointSignificance_ForAT8(Point2D*);
 	double calculateEdgeSignificance(Edge* edge);
+    double calculateSignificanceVoronoi(std::vector<Triangle*> oTriangles,
+                                        std::vector<Triangle*> nTriangles,
+                                        std::vector<Point2D*> attachedPoints,
+                                        Point2D* point);
 	double calculateSignificance(std::vector<Triangle*>,
 											 std::vector<Triangle*>,
 											 std::vector<Point2D*>,
@@ -58,10 +66,29 @@ private:
 											 std::vector<Triangle*>,
 											 std::vector<Point2D*>,
 											 Edge*);
+
+
 	double calculateNewError(std::vector<Triangle*>, Point2D*);
+
 	double calculateError(Triangle*, Point2D*);
 	double calculateError(Triangle*, Point2D*,double);
-	void calculateSignificanceForHeap(Point2D*);
+
+    //Fonctions rajoutées pour "corriger l'erreur ? " (avril 2026)
+    /*double calculateSignificance26(std::vector<Triangle*> oTriangles,
+                                   std::vector<Triangle*> nTriangles,
+                                   std::vector<Point2D*> attachedPoints,
+                                   Point2D* point);*/
+    /*double calculateNewError26(std::vector<Triangle*> nTriangles,
+                               Point2D* point);*/
+
+
+    //Gebraucht um den Voronoi Fehler zu berechnen !
+    double calculateNewError_Voronoi(std::vector<Triangle*> nTriangles,
+                                     Point2D* point);
+    double calculateError_Voronoi(Triangle* triangle, Point2D* point);
+
+    void calculateSignificanceVoronoiForHeap(Point2D* point);
+    void calculateSignificanceForHeap(Point2D*);
 	void calculateSignificanceForHeap_ForAT8(Point2D*);
 	void calculateSignificanceForEdgeHeap(Edge*);
 	void deletePoint(Point2D*);

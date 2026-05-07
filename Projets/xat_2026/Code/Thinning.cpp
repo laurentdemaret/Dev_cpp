@@ -84,12 +84,47 @@ Thinning::Thinning(Triangulation* tri)
 	fh_setneginf(this->thinnedNeighborHeap, (void*)empty_point_n);	
 }
 
+
+double Thinning::calculateNewError_Voronoi(vector<Triangle*> nTriangles,
+                                   Point2D* point)
+{
+    double max = 0.;
+    //TODO26: remplacer les lignes ci-dessous par les lignes correctes correspondantes
+    for (unsigned int i = 0; i < nTriangles.size(); i++)
+    {
+        double err = calculateError_Voronoi(nTriangles[i], point);
+        if (max <= err)
+        {
+            max = err;
+            return max;
+        }
+    }
+    return max;
+}
+
+
+/*double Thinning::calculateNewError26(vector<Triangle*> nTriangles,
+                                   Point2D* point)
+{
+    double err = 0.;
+    for (unsigned int i = 0; i < nTriangles.size(); i++)
+    {
+        err += calculateError(nTriangles[i], point);
+    }
+    return err;
+}*/
+
+
+
 double Thinning::calculateNewError(vector<Triangle*> nTriangles,	
 		 							 Point2D* point)
 {
 	double max = 0.;
 	for (unsigned int i = 0; i < nTriangles.size(); i++) 
 	{
+        //calculateError returns:
+        //        -1 if the point is not in the triangle
+        //        the quadratic error if is inside the triangle
 		double err = calculateError(nTriangles[i], point);
 		if (max <= err) 
 		{
@@ -144,6 +179,62 @@ double Thinning::calculateSignificance(vector<Triangle*> oTriangles, vector<Tria
 }
 
 
+
+// @param oTriangles
+// @param nTriangles
+// @param attachedPoints
+// @param edge
+// @return
+double Thinning::calculateSignificanceVoronoi(vector<Triangle*> oTriangles,
+                                       vector<Triangle*> nTriangles,
+                                       vector<Point2D*> attachedPoints,
+                                       Point2D* point)
+{
+    //TODO26: toute cette fonction doit ?tre modifiée !!
+    //TODO26: rempacer calculateNewError par calculateNewErrorVoronoi
+    //TODO26: rempacer calculateError par calculateErrorVoronoi
+    double max;
+    double newError = calculateNewError_Voronoi(nTriangles, point);
+    //if(true) return newError;
+    double formerError = 0.;
+    for (unsigned int i = 0; i < attachedPoints.size(); i++)
+    {
+        //TODO max = -1: komisch, dass die sig besser ist, wenn man alle
+        //TODO points beruecksichtigt, auch die die nicht zur alten cell gehören...
+        max = -1.;
+        for (unsigned int j = 0; j < oTriangles.size(); j++)
+        {
+            double err = calculateError_Voronoi(oTriangles[j], attachedPoints[i]);
+            if (max < err)
+            {
+                max = err;
+                break;
+            }
+        }
+        // attached point inside the old cell
+        if( max >= 0 )
+        {
+            // increase former error
+            formerError += max;
+
+            max = 0.;
+            for (unsigned int j = 0; j < nTriangles.size(); j++)
+            {
+                double err = calculateError_Voronoi(nTriangles[j], attachedPoints[i]);
+                if (max < err)
+                {
+                    max = err;
+                    break;
+                }
+            }
+            newError += max;
+        }
+    }
+
+    return (newError>formerError)? newError-formerError : 0;
+}
+
+
 // @param oTriangles
 // @param nTriangles
 // @param attachedPoints
@@ -155,8 +246,8 @@ double Thinning::calculateSignificance(vector<Triangle*> oTriangles,
 										 Point2D* point)
 {
 	double max;
+    //newError: initialised to the value of the point to be removed itself
 	double newError = calculateNewError(nTriangles, point);
-//if(true) return newError;
 	double formerError = 0.;
 	for (unsigned int i = 0; i < attachedPoints.size(); i++) 
 	{
@@ -166,19 +257,23 @@ double Thinning::calculateSignificance(vector<Triangle*> oTriangles,
         for (unsigned int j = 0; j < oTriangles.size(); j++)
         {
 			double err = calculateError(oTriangles[j], attachedPoints[i]);
-			if (max < err) {
+            if (max < err)
+            {
 				max = err;
 				break;
 			}
 		}
-		// attached point inside the old cell 
-		if( max >= 0 ){
+        // attached point inside the old cell
+        // TODO: warum sollte das anders sein ? (28/04/26)
+        if( max >= 0 )
+        {
 			// increase former error 
 			formerError += max;
 			
 			max = 0.;
 			for (unsigned int j = 0; j < nTriangles.size(); j++) 
 			{
+                //calculate
 				double err = calculateError(nTriangles[j], attachedPoints[i]);
 				if (max < err) 
 				{
@@ -189,8 +284,13 @@ double Thinning::calculateSignificance(vector<Triangle*> oTriangles,
 			newError += max;
 		}
 	}
-	return (newError>formerError)? newError-formerError : 0;
+
+    //this (modified 28/04/2026)
+    return newError-formerError;
+    // replaces the old line:
+    //return (newError>formerError)? newError-formerError : 0;
 }
+
 
 
 double Thinning::calculateError(Triangle* triangle, Point2D* point)
@@ -227,12 +327,13 @@ double Thinning::calculateError(Triangle* triangle, Point2D* point)
 	int bv = b->f;
 	int cv = c->f;
 	
-	//This term is the quadratic error term 
+    //This term is the signed error
 	double tmp = (((ba*av)+(bb*bv)+(bc*cv))/det)-v;
-	
-	
+		
 	//Now computes an L1 penalisation of the solution
-	double pen = 0., det2 = (bx-ax)*(cy-ay) -(cx-ax)*(by-ay);
+    //TODO26: check this L1 penalisation !!!
+    double pen = 0.;
+    /*double     det2 = (bx-ax)*(cy-ay) -(cx-ax)*(by-ay);
 	if(fabs(det2)>0) 
 	{
 		//compute the parameters dx and dy of: f(x,y) = dx*x+dy*y+k
@@ -241,10 +342,33 @@ double Thinning::calculateError(Triangle* triangle, Point2D* point)
 		pen = pow(dx*dx+dy*dy,0.5);
 		//TODO: include tau as parameter and use as follows
 		//tmp += pow((dx*dx+dy*dy),tau);
-	}
+    }*/
 	
 	//double lambda = this->lambda;
-	return tmp*tmp + (this->lambda)*pen;	
+    //ceci est la version avec pénalisation
+    //return tmp*tmp + (this->lambda)*pen;
+    //ceci est la version sans pénalisation (réintroduite le 27 avril 26)
+    return tmp*tmp;
+}
+
+
+// *****************************************
+// Calculate Error Voronoi
+// *****************************************
+double Thinning::calculateError_Voronoi(Triangle* triangle, Point2D* point)
+{
+    double ErrorVoronoi=-1.;
+
+    if(triangle->insideTriangle(point))
+    {
+      Point2D* vc = triangle->getVoronoiCentroid(point);
+      int voronoi_val = vc->f;
+      int val = point->f;
+
+      ErrorVoronoi = (val-voronoi_val)*(val-voronoi_val);
+    }
+
+    return ErrorVoronoi;
 }
 
 
@@ -302,6 +426,26 @@ double Thinning::calculateError(Triangle* triangle, Point2D* point)
 }*/
 
 
+double Thinning::calculatePointSignificanceVoronoi(Point2D* point)
+{
+    // get neighbors
+    vector<Point2D*> neighborsCopy = point->getNeighborsCopy();
+    vector<Triangle*> oTriangles = point->getTriangles();
+    Triangulation* tri = Triangulation::makeTriangulation(neighborsCopy);
+    vector<Triangle*> nTriangles = tri->getTriangles();
+    vector<Point2D*> attachedPoints = this->triangulation->getAttachedPoints(neighborsCopy);
+
+    //double sig = calculateSignificance(oTriangles,nTriangles,attachedPoints,point);
+    //TODO: calculer sig
+    double sig = calculateSignificanceVoronoi(oTriangles,nTriangles,attachedPoints,point);
+
+    // refactor objects
+    Triangle::deleteTriangles(oTriangles);
+    tri->deleteTriangulation(nTriangles);
+    return sig;
+}
+
+
 double Thinning::calculatePointSignificance(Point2D* point)
 {
 	// get neighbors 
@@ -314,7 +458,6 @@ double Thinning::calculatePointSignificance(Point2D* point)
 
 	// refactor objects 
 	Triangle::deleteTriangles(oTriangles);
-
 	tri->deleteTriangulation(nTriangles);
 	return sig;
 }
@@ -347,15 +490,19 @@ double Thinning::calculateEdgeSignificance(Edge* edge)
     // get neighbors
 	vector<Point2D*> neighbors;
 	vector<Point2D*> on = edge->org->getNeighbors();
-	for (unsigned int i = 0; i < on.size(); i++) {
-		if(on[i] != edge->dest){
+    for (unsigned int i = 0; i < on.size(); i++)
+    {
+        if(on[i] != edge->dest)
+        {
 			neighbors.push_back(on[i]);
 		}
 	}
 	vector<Point2D*> dn = edge->dest->getNeighbors();
-	for (unsigned int i = 0; i < dn.size(); i++ ) {
+    for (unsigned int i = 0; i < dn.size(); i++ )
+    {
 		if( find(neighbors.begin(), neighbors.end(), dn[i]) == neighbors.end() 
-		 && dn[i] != edge->org){
+         && dn[i] != edge->org)
+        {
 			neighbors.push_back(dn[i]);
 		}
 	}
@@ -376,16 +523,17 @@ double Thinning::calculateEdgeSignificance(Edge* edge)
 
 void Thinning::fastThinning(unsigned int tcount)
 {
-	/* build point heap */
+    // build point heap
 	for (unsigned int i = 0; i < this->triangulation->nodes.size(); i++) 
 	{
 		this->calculateSignificanceForHeap(this->triangulation->nodes[i]);
 	}
-	for(unsigned int n = 0; n < tcount; n++) {
-		/* get less significant node from point heap */
+    for(unsigned int n = 0; n < tcount; n++)
+    {
+        // get less significant node from point heap
 		Point2D* ph_min = (Point2D*)fh_extractmin(this->nodeHeap);
 		
-		/* check if current node is dirty */
+        // check if current node is dirty
 		if(ph_min->dirty){
 			n--;
 			this->calculateSignificanceForHeap(ph_min);
@@ -411,6 +559,58 @@ ph_min->x<<","<<ph_min->y<<" -> "<<ph_min->epsilon<<": "<<endl;
 	// free mem 
 	fh_deleteheap(this->nodeHeap);	
 }
+
+
+void Thinning::thinningAT9(unsigned int tcount)
+{
+    std::cout << "[thinningAT9]: Voronoi based" << std::endl;
+    // Initialisation : build point heap
+    for (unsigned int i = 0; i < this->triangulation->nodes.size(); i++)
+    {
+        this->calculateSignificanceVoronoiForHeap(this->triangulation->nodes[i]);
+    }
+    std::cout << "[thinningAT9]: initialisation done" << std::endl;
+
+   //TODO: finir cette implémentation
+    // Iteration : build point heap
+    for(unsigned int n = 0; n < tcount; n++)
+    {
+        cout<<"[deleting point] "<<n<<"/"<<tcount<<endl;
+        // get less significant node from point heap
+        Point2D* ph_min = (Point2D*)fh_extractmin(this->nodeHeap);
+        cout<<"[fh_extractmin done] "<<endl;
+        ph_min->fh_el = NULL;
+        vector<Point2D*> neighbors = ph_min->getNeighbors();
+        cout<<"[getNeighbors done] "<<endl;
+
+        std::cout << "this->triangulation->xMax : " << this->triangulation->xMax << endl;
+        std::cout << "this->triangulation->yMax : " << this->triangulation->yMax << endl;
+
+        // delete point
+        this->triangulation->deletePoint(ph_min);
+        cout<<"[deletePoint done] "<<endl;
+
+        // recalculate significance of neighbors
+        for(unsigned int i = 0; i < neighbors.size(); i++)
+        {
+            if(neighbors[i]->gridBound) continue;
+            fh_delete(this->nodeHeap, (fibheap_el*)neighbors[i]->fh_el);
+            neighbors[i]->fh_el = NULL;
+            this->calculateSignificanceVoronoiForHeap(neighbors[i]);
+        }
+        /* ********************** DEBUG ***************************** */
+        cout<<"[deleting point] "<<n<<"/"<<tcount<<"  : "<<
+            ph_min->x<<","<<ph_min->y<<" -> "<<ph_min->epsilon<<endl;
+        /* ********************** DEBUG ***************************** */
+
+
+    }
+    // free mem
+    fh_deleteheap(this->nodeHeap);
+    fh_deleteheap(this->edgeHeap);
+
+}
+
 
 void Thinning::thinningAT5(unsigned int tcount)
 {
@@ -647,12 +847,26 @@ void Thinning::updateHeaps(vector<Point2D*> neighbors,
 }
 
 
+void Thinning::calculateSignificanceVoronoiForHeap(Point2D* point)
+{
+    if(!point->gridBound)
+    {
+        // calculate significance the this node
+        point->epsilon = this->calculatePointSignificanceVoronoi(point);
+        // insert node into the fib heap and store pointer to the heap element
+        point->fh_el = (void*)fh_insert( this->nodeHeap, (void*)(point) );
+        point->dirty = false;
+
+    }
+}
+
 void Thinning::calculateSignificanceForHeap(Point2D* point)
 {
-	if(!point->gridBound){
-		/* calculate significance the this node */
+    if(!point->gridBound)
+    {
+        // calculate significance the this node
 		point->epsilon = this->calculatePointSignificance(point);
-	    /* insert node into the fib heap and store pointer to the heap element */
+        // insert node into the fib heap and store pointer to the heap element
 	    point->fh_el = (void*)fh_insert( this->nodeHeap, (void*)(point) );
 	    point->dirty = false;
 	}
