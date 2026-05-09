@@ -483,7 +483,7 @@ int main(int argc, char* argv[])
 		PGM::renderTriangulation(image, r, c, 
 														 fn.c_str(), ttri->getTriangles());
         string fn_voronoi = filename+"_Voronoi.pgm";
-        PGM::renderTriangulation(image_voronoi, r, c,
+        PGM::renderVoronoi(image_voronoi, r, c,
                                  fn_voronoi.c_str(), ttri->getTriangles());
 		Thinning* tthinning = new Thinning(ttri);
 		tthinning->printEdges(filename+".edge",1);
@@ -502,9 +502,6 @@ int main(int argc, char* argv[])
 	cout<<"[triangulation] "<<(clock()-start)<<endl;
 
     std::cout <<   " tri->nbRows :" << tri->nbRows   << "  tri->nbCols : "  << tri->nbCols << std::endl;
-    // *************************
-    //* repousser cette borne
-    // *************************
 
     //This is the thinning algorithm
 	start  = clock();
@@ -531,6 +528,10 @@ int main(int argc, char* argv[])
 			thinning->fastThinning(iterations);		
 			break;
 	}
+
+        // *************************
+        //* repousser cette borne
+        // *************************
 
     cout<<"[Thinning] "<<(clock()-start)<<endl;
 
@@ -564,15 +565,21 @@ int main(int argc, char* argv[])
 	filenameTriangulationEps.append(oss_temp.str());
 	string filenameTriangulationOff = filename;
 	filenameTriangulationOff.append(oss_temp.str());
-	
+    string filenameTriangulationPoints = filename;
+    filenameTriangulationPoints.append(oss_temp.str());
+
 	string filenameRightAfterThinning = filenameComplete+"_RightAfterThinning.pgm";
 	
     filenameTriangulationEps+="_TriangulationRAT.eps";
 	filenameTriangulationOff+="_TriangulationRAT.off";
-	
+    filenameTriangulationPoints+="_RAT.voronoi";
+
     thinning->printTriangulationEps(filenameTriangulationEps);
 	thinning->printTriangulationOff(filenameTriangulationOff);
 
+    //TODO !!
+    //thinning->
+    thinning->printNodes(filenameTriangulationPoints,1);
     std::cout << "[print Triangulation functionalities done]" << std::endl;
 
     PGM::renderTriangulation(image, thinning->triangulation->nbRows,

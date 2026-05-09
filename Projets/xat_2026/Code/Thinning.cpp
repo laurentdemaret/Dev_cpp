@@ -366,6 +366,7 @@ double Thinning::calculateError_Voronoi(Triangle* triangle, Point2D* point)
       int val = point->f;
 
       ErrorVoronoi = (val-voronoi_val)*(val-voronoi_val);
+      //TODO: VARIANTE - mit L1-Norm
     }
 
     return ErrorVoronoi;
@@ -571,7 +572,6 @@ void Thinning::thinningAT9(unsigned int tcount)
     }
     std::cout << "[thinningAT9]: initialisation done" << std::endl;
 
-   //TODO: finir cette implémentation
     // Iteration : build point heap
     for(unsigned int n = 0; n < tcount; n++)
     {
@@ -739,17 +739,15 @@ void Thinning::thinningAT8(unsigned int tcount)
 		
 	}
 	
-	/* free mem */
+    // free mem
 	fh_deleteheap(this->nodeHeap);	
 	fh_deleteheap(this->edgeHeap);	
 }
 
 
-
-
 void Thinning::deletePoint(Point2D* point)
 {
-	/* remove old edges from edde heap */
+    // remove old edges from edde heap
 	this->updateHeaps(point->getNeighbors(),point, NULL);
 }
 
@@ -762,15 +760,17 @@ void Thinning::deleteEdge(Edge* edge)
 	org->fh_el=NULL;
 	fh_delete(this->nodeHeap, (fibheap_el*)(dest->fh_el)); 
 	dest->fh_el=NULL;
-	/* remove edge from edge heap */
+    // remove edge from edge heap
 	fh_delete(this->edgeHeap, (fibheap_el*)(edge->fh_el)); 
 	edge->fh_el=NULL;
 	
-	/* collect unique list of edge neighbor nodes */
+    // collect unique list of edge neighbor nodes
 	vector<Point2D*> neighbors;
 	vector<Point2D*> orgNeighbors = org->getNeighbors();
-	for (unsigned int i = 0; i < orgNeighbors.size(); i++) {
-		if(orgNeighbors[i] != dest){
+    for (unsigned int i = 0; i < orgNeighbors.size(); i++)
+    {
+        if(orgNeighbors[i] != dest)
+        {
 			neighbors.push_back(orgNeighbors[i]);
 		}
 	}
@@ -789,7 +789,6 @@ void Thinning::updateHeaps(vector<Point2D*> neighbors,
 							Point2D* point, 
 							Edge* edge)
 {
-	
     // remove old edges from edge heap
     for (unsigned int j = 0; j < neighbors.size(); j++)
     {
@@ -807,20 +806,19 @@ void Thinning::updateHeaps(vector<Point2D*> neighbors,
 		}
 	}
 		
-	if(edge != NULL){
-//		this->triangulation->deleteEdge(edge);
-/* */
+    if(edge != NULL)
+    {
+       //this->triangulation->deleteEdge(edge);
 		Point2D* o = edge->org;
 		Point2D* d = edge->dest;
 		this->triangulation->deletePoint(o);
 		this->triangulation->deletePoint(d);
-
 	}
 	else{
 		this->triangulation->deletePoint(point);		
 	}
-	
-	vector<Edge*> dirtryEdges;
+
+    vector<Edge*> dirtryEdges;
     for (unsigned int j = 0; j < neighbors.size(); j++)
     {
 		if(neighbors[j]->gridBound) continue;
@@ -839,7 +837,7 @@ void Thinning::updateHeaps(vector<Point2D*> neighbors,
 		}
 	}	
 	
-	/* calculate edge significance */
+    // calculate edge significance
 	for (unsigned int i= 0; i < dirtryEdges.size(); i++) 
 	{
 		this->calculateSignificanceForEdgeHeap(dirtryEdges[i]);
@@ -856,7 +854,6 @@ void Thinning::calculateSignificanceVoronoiForHeap(Point2D* point)
         // insert node into the fib heap and store pointer to the heap element
         point->fh_el = (void*)fh_insert( this->nodeHeap, (void*)(point) );
         point->dirty = false;
-
     }
 }
 
@@ -1140,16 +1137,19 @@ void printSingleNode(ostream& out, Point2D* point, int option)
     out << point->y << " ";
     out.width(16);
     out.precision(8);
-    if (option==0){
+    if (option==0)
+    {
 		if( point->epsilon == __DBL_MAX__ )
 		{
 			out << "INFINITE";
 		}
-      	else{
+        else
+        {
 			out << point->epsilon;
       	}
     }
-    else{
+    else
+    {
 		out << point->f;
     }
 }
